@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science & Technology Hub</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #27ae60;
+            --bg: #ffffff;
+            --text: #333;
+            --hover-bg: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 40px;
+            background-color: var(--bg);
+        }
+
+        header {
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            max-width: 100%;
+        }
+
+        h1 { font-size: 1.8rem; color: var(--primary); margin: 0; }
+        p { color: #7f8c8d; font-size: 0.9rem; margin-top: 5px; }
+
+        .hub-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            max-width: 1300px;
+            margin: 0 auto;
+            gap: 50px;
+        }
+
+        .lesson-column { width: 420px; }
+        .board-column { width: 210px; }
+
+        h2 {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            border-left: 4px solid var(--accent);
+            padding-left: 10px;
+        }
+
+        .list-container {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            position: relative;
+        }
+
+        .item {
+            padding: 12px 15px;
+            background: var(--hover-bg);
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .item:hover {
+            border-color: var(--accent);
+            background: #fff;
+            box-shadow: 4px 4px 15px rgba(0,0,0,0.05);
+            z-index: 100;
+        }
+
+        .popout-menu {
+            position: absolute;
+            top: 0;
+            width: 210px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 10px 10px 30px rgba(0,0,0,0.1);
+            padding: 8px 0;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.25s ease;
+        }
+
+        /* Direction Logic */
+        .lesson-column .popout-menu { left: 100%; }
+        .board-column .popout-menu { right: 100%; }
+
+        .item:hover > .popout-menu {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .lesson-column .item:hover > .popout-menu { transform: translateX(10px); }
+        .board-column .item:hover > .popout-menu { transform: translateX(-10px); }
+
+        /* SUB POPOUT LOGIC */
+        .has-sub {
+            display: block;
+            padding: 10px 20px;
+            color: var(--primary);
+            font-size: 0.9rem;
+            position: relative;
+            text-decoration: none;
+        }
+
+        .has-sub:hover { background: #f1f1f1; color: var(--accent); }
+
+        .sub-popout {
+            position: absolute;
+            top: 0;
+            width: 230px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 10px 10px 30px rgba(0,0,0,0.1);
+            padding: 8px 0;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.2s ease;
+            z-index: 101;
+        }
+
+        /* Directional Logic for multi-level */
+        .lesson-column .sub-popout { left: 100%; transform: translateX(-5px); }
+        .board-column .sub-popout { right: 100%; transform: translateX(5px); }
+
+        .has-sub:hover > .sub-popout {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .lesson-column .has-sub:hover > .sub-popout { transform: translateX(5px); }
+        .board-column .has-sub:hover > .sub-popout { transform: translateX(-5px); }
+
+        .popout-menu a {
+            display: block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: var(--primary);
+            font-size: 0.85rem;
+        }
+
+        .popout-menu a:hover { background: #f9f9f9; color: var(--accent); }
+
+        /* Arrows */
+        .lesson-column .has-sub::after { content: '▸'; float: right; opacity: 0.3; }
+        .board-column .has-sub::before { content: '◂'; opacity: 0.3; margin-right: 8px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Science & Technology Hub</h1>
+    <p>Select a lesson for resources or view SEE Board Exam solutions on the right.</p>
+</header>
+
+<div class="hub-container">
+    <div class="lesson-column">
+        <h2>Chapter Lessons</h2>
+        <div class="list-container" id="mainList"></div>
+    </div>
+
+    <div class="board-column">
+        <h2>SEE Board Exams</h2>
+        <div class="list-container">
+            <div class="item">
+                <span class="item-title">SEE 2082</span>
+       <div class="popout-menu">
+                    <div class="has-sub">
+                        📝 Question Paper
+                        <div class="sub-popout">
+                            <a href="#" target="_blank">Koshi Province 2082</a>
+                            <a href="#" target="_blank">Madhesh Province 2082</a>
+                            <a href="#" target="_blank">Bagmati Province 2082</a>
+                            <a href="#" target="_blank">Gandaki Province 2082</a>
+                            <a href="#" target="_blank">Lumbini Province 2082</a>
+                            <a href="#" target="_blank">Karnali Province 2082</a>
+                            <a href="#" target="_blank">Sudur Paschim Province 2082</a>
+                        </div>
+                    </div>
+
+                    <div class="has-sub">
+                        ✅ Solution Sheet
+                        <div class="sub-popout">
+                            <div class="has-sub">
+                                Nepali Medium
+                                <div class="sub-popout">
+                                    <a href="#" target="_blank">Koshi (Nepali)</a>
+                                    <a href="#" target="_blank">Madhesh (Nepali)</a>
+                                    <a href="#" target="_blank">Bagmati (Nepali)</a>
+                                    <a href="#" target="_blank">Gandaki (Nepali)</a>
+                                    <a href="#" target="_blank">Lumbini (Nepali)</a>
+                                    <a href="#" target="_blank">Karnali (Nepali)</a>
+                                    <a href="#" target="_blank">Sudur Paschim (Nepali)</a>
+                                </div>
+                            </div>
+                            <div class="has-sub">
+                                English Medium
+                                <div class="sub-popout">
+                                    <a href="#" target="_blank">Koshi (English)</a>
+                                    <a href="#" target="_blank">Madhesh (English)</a>
+                                    <a href="#" target="_blank">Bagmati (English)</a>
+                                    <a href="#" target="_blank">Gandaki (English)</a>
+                                    <a href="#" target="_blank">Lumbini (English)</a>
+                                    <a href="#" target="_blank">Karnali (English)</a>
+                                    <a href="#" target="_blank">Sudur Paschim (English)</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>           
+ <div class="item">
+                <span class="item-title">SEE 2081</span>
+                <div class="popout-menu">
+                    <div class="has-sub">
+                        📝 Question Paper
+                        <div class="sub-popout">
+                            <a href="https://drive.google.com/file/d/10Llck-aPvBy0FQs2H3UIjvTR9FSWetkX/view?usp=sharing" target="_blank">Koshi Province 2081</a>
+                            <a href="https://drive.google.com/file/d/1-ETCUbrAcKcHIFhhArsukp23gofIBFZT/view?usp=sharing" target="_blank">Madhesh Province 2081</a>
+                            <a href="https://drive.google.com/file/d/1HzAT4ipSjQE24noMa4EZ_3JlA5C2sfe9/view?usp=sharing" target="_blank">Bagmati Province 2081</a>
+                            <a href="https://drive.google.com/file/d/1X1v1TDXGDzbXmUN9Y4jOKGf-kBUYMhFj/view?usp=sharing" target="_blank">Gandaki Province 2081</a>
+                            <a href="https://drive.google.com/file/d/1kgrh8WyRAITjOPZZz_5ab_8bTN_M8XVu/view?usp=sharing" target="_blank">Lumbini Province 2081</a>
+                            <a href="https://drive.google.com/file/d/1LdjSPKYukEnKch4F-4LcEwojZhgmQVYT/view?usp=sharing" target="_blank">Karnali Province 2081</a>
+                            <a href="https://drive.google.com/file/d/1e8t9DSgMK8Jv3Xhbg1P3Q8kJ9aalUP6l/view?usp=sharing" target="_blank">Sudur Paschim Province 2081</a>
+                            <a href="https://drive.google.com/file/d/1FMUBUkBZe3TWcE9jyGtPhcKADOWcdvOS/view?usp=sharing" target="_blank">Practice sets</a>
+                        </div>
+                    </div>
+
+                    <div class="has-sub">
+                        ✅ Solution Sheet
+                        <div class="sub-popout">
+                            <div class="has-sub">
+                                Nepali Medium
+                                <div class="sub-popout">
+                                    <a href="https://drive.google.com/file/d/12jUIhWGUQ370UWnOkdjKXn73-pFsIuZb/view?usp=sharing" target="_blank">Koshi (Nepali)</a>
+                                    <a href="https://drive.google.com/file/d/1fP5ftwGOEMxw_KRhkQAitYCJRQ29d3h5/view?usp=sharing" target="_blank">Madhesh (Nepali)</a>
+                                    <a href="https://drive.google.com/file/d/1-7n9YsqEX7BF5k_gqL5jeysBmWp__cUl/view?usp=sharing" target="_blank">Bagmati (Nepali)</a>
+                                    <a href="https://drive.google.com/file/d/1FRVXbJR48e4Q0OLTsu3wTeoHPRPRW0w1/view?usp=sharing" target="_blank">Gandaki (Nepali)</a>
+                                    <a href="https://drive.google.com/file/d/1qR4CdaJqN5efYkHoHhsIguvHBVwZuSIk/view?usp=sharing" target="_blank">Lumbini (Nepali)</a>
+                                    <a href="https://drive.google.com/file/d/1GfOscLgv-4hCLTalP6WlKS5ZVGLdXExL/view?usp=sharing" target="_blank">Karnali (Nepali)</a>
+                                    <a href="https://drive.google.com/file/d/1Swk1udgv0f_7YPlP3BypFU969xZenPGR/view?usp=sharing" target="_blank">Sudur Paschim (Nepali)</a>
+                                </div>
+                            </div>
+                            <div class="has-sub">
+                                English Medium
+                                <div class="sub-popout">
+                                    <a href="https://docs.google.com/document/d/11LCJTiuiSVO_p_iVMAflZOnKdXNriYQn/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true" target="_blank">Koshi (English)</a>
+                                    <a href="https://docs.google.com/document/d/1ryiXdeDBPEUk1i7dl8a88HzzGOwBJ-Vd/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true" target="_blank">Madhesh (English)</a>
+                                    <a href="https://docs.google.com/document/d/1JWhiLlnnYtfHXk70k3YnmPh6F9SL9pCP/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true" target="_blank">Bagmati (English)</a>
+                                    <a href="https://docs.google.com/document/d/1m2cShG6JpewvUv4ZT_sNL1Hwuwe7D24j/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true" target="_blank">Gandaki (English)</a>
+                                    <a href="https://docs.google.com/document/d/1fDH87W9bV-w56tDZfbcG8_idiGdkukOw/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true" target="_blank">Lumbini (English)</a>
+                                    <a href="https://docs.google.com/document/d/1JI6rO1S9iHulMjkjRjZzwx8OoMAlYo-s/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true" target="_blank">Karnali (English)</a>
+                                    <a href="https://docs.google.com/document/d/1PUfC9AIFGmRI-SWrmn8GNv7W2K2pmNxf/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true" target="_blank">Sudur Paschim (English)</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item">
+                <span class="item-title">SEE 2080</span>
+               <div class="popout-menu">
+                    <div class="has-sub">
+                        📝 Question Paper
+                        <div class="sub-popout">
+                            <a href="#" target="_blank">Koshi Province 2080</a>
+                            <a href="#" target="_blank">Madhesh Province 2080</a>
+                            <a href="#" target="_blank">Bagmati Province 2080</a>
+                            <a href="#" target="_blank">Gandaki Province 2080</a>
+                            <a href="#" target="_blank">Lumbini Province 2080</a>
+                            <a href="#" target="_blank">Karnali Province 2080</a>
+                            <a href="#" target="_blank">Sudur Paschim Province 2080</a>
+                            <a href="#" target="_blank">Set 1</a> 
+                            <a href="#" target="_blank">Set 2</a> 
+                            <a href="#" target="_blank">Set 3</a> 
+                            <a href="#" target="_blank">Grade increasement</a> 
+                        </div>
+                    </div>
+
+                    <div class="has-sub">
+                        ✅ Solution Sheet
+                        <div class="sub-popout">
+                            <div class="has-sub">
+                                Nepali Medium
+                                <div class="sub-popout">
+                                    <a href="https://drive.google.com/file/d/1yRu23ApVG1-5ZwegtSwMXOSaWyjWulUa/view?usp=sharing" target="_blank">Koshi (Nepali)</a>
+                                    <a href="https://drive.google.com/file/d/1e3FgTaphybOMefRs37qCeCA45jrhS31e/view?usp=sharing" target="_blank">Madhesh (Nepali)</a>
+                                    <a href="https://drive.google.com/file/d/1705VA68NCFFtodtlPyB7DZR8V93ncie8/view?usp=sharing" target="_blank">Bagmati (Nepali)</a>
+                                    <a href="https://drive.google.com/file/d/1SWUj1r50ZiZDtLKvha5PeZhAfG6AaKHD/view?usp=sharing" target="_blank">Gandaki (Nepali)</a>
+                                    <a href="https://drive.google.com/file/d/1hzMBJ-WGc6MN9ziReUEvbShBOP8RCeRE/view?usp=sharing" target="_blank">Lumbini (Nepali)</a>
+                                    <a href="https://drive.google.com/file/d/1mJJIHYVPoh1D3uWfHu6CVk9cJlhQJPuI/view?usp=sharing" target="_blank">Karnali (Nepali)</a>
+                                    <a href="https://drive.google.com/file/d/1JvPAojjQtH4eXT6SumthE51s9aKZ0b25/view?usp=sharing" target="_blank">Sudur Paschim (Nepali)</a>
+                                    <a href="https://drive.google.com/file/d/1yxvgyKzIYsI8wXKH_rg_QuE1GgC_thB_/view?usp=sharing" target="_blank">Set 1(Nepali)</a> 
+                                    <a href="https://drive.google.com/file/d/1tnUNFSxdVEYaHLDK4EHYa2AV7j_AbAkt/view?usp=sharing" target="_blank">Set 2(Nepali)</a> 
+                                    <a href="https://drive.google.com/file/d/1F2zMTDwGIhXhghcRO5Hk3OUtrg_qZPua/view?usp=sharing" target="_blank">Set 3(Nepali)</a> 
+                                    <a href="https://drive.google.com/file/d/1dmA3Zi21KuaJjRz-i9WCP2Y72CtDdpUI/view?usp=sharing" target="_blank">Grade increasement(Nepali)</a> 
+                                </div>
+                            </div>
+                            <div class="has-sub">
+                                English Medium
+                                <div class="sub-popout">
+                                    <a href="#" target="_blank">Koshi (English)</a>
+                                    <a href="#" target="_blank">Madhesh (English)</a>
+                                    <a href="#" target="_blank">Bagmati (English)</a>
+                                    <a href="#" target="_blank">Gandaki (English)</a>
+                                    <a href="#" target="_blank">Lumbini (English)</a>
+                                    <a href="#" target="_blank">Karnali (English)</a>
+                                    <a href="#" target="_blank">Sudur Paschim (English)</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+<script>
+       // Link Data
+    const cdcLinks = { 
+1: "https://drive.google.com/file/d/1ND8tgxusuOUIdBYbsEFabl_AS7LhJzZI/view?usp=sharing", 
+2: "https://drive.google.com/file/d/1u8WEwj3fsgL6TolfEyZwZ7dtm1-g-1xj/view?usp=sharing", 
+3: "https://drive.google.com/file/d/122eCgUmth14pfEdRJjBigj3aj1oywLJi/view?usp=sharing", 
+4: "https://drive.google.com/file/d/1ldUHlpFm8s8viHI2LxePLTAJC-1gR3Yf/view?usp=sharing", 
+5: "https://drive.google.com/file/d/1LP-AkkcJW7H9WvAxHsnFp5Xkh4AcDspC/view?usp=sharing", 
+6: "https://drive.google.com/file/d/1_oYH9f0PFq_x3hgV9LTfJAzHsizsYr8v/view?usp=sharing", 
+7: "https://drive.google.com/file/d/12WQmR109GOywkFsQFMPuZ0oFp1IyvHS8/view?usp=sharing", 
+8: "https://drive.google.com/file/d/1G4jeZpcyM-w3AjqtnRBIddTbjvejR-l6/view?usp=sharing", 
+9: "https://drive.google.com/file/d/1XUw3SvNlwviJb7IBtpJjFRw4LBbAOuWc/view?usp=sharing", 
+10: "https://drive.google.com/file/d/1tS078XwQwZKivRpqsMFEUkYiDxYG9eZv/view?usp=sharing", 
+11: "https://drive.google.com/file/d/1ED1rc9ymh6kTeVlfNoyc72d2guAkQHR-/view?usp=sharing", 
+12: "https://drive.google.com/file/d/1RhTmIBhbEZafgB3T7ImfCGxgQWkTPOvc/view?usp=sharing", 
+13: "https://drive.google.com/file/d/1HnYyymnk8Af-l-j0trQzQB6HUf2GiYKy/view?usp=sharing", 
+14: "https://drive.google.com/file/d/1NzGjX0MYj0ZVnj99sIq95nMF1URUNs3m/view?usp=sharing", 
+15: "https://drive.google.com/file/d/1UCvf8d5JqCZ2sWLOzIqWSTlfQF5JJcIc/view?usp=sharing", 
+16: "https://drive.google.com/file/d/1XazsywjvTrmGcQo9eGWlVYGy0STBkLpr/view?usp=sharing", 
+17: "https://drive.google.com/file/d/1yWlkrDPSKw0KaJKp-50TPuj7GNbOxDGg/view?usp=sharing", 
+18: "https://drive.google.com/file/d/1P36-QCQeJq0uAt6BoGeSshRmW_u-8M_3/view?usp=sharing", 
+19: "https://drive.google.com/file/d/1d3Ee_s8DIRHaOzrVZpErSkxcqSMq8RVg/view?usp=sharing" };
+    
+const modernLinks = { 
+1: "https://drive.google.com/file/d/1B_DPZQKESwNUl1LLpLZgD2aeu8M4yrjM/view?usp=sharing", 
+2: "https://drive.google.com/file/d/1qG1OPOIzWiAxoTT-A8nbDdg7UUGiwDby/view?usp=sharing", 
+3: "https://drive.google.com/file/d/1Z-TOALgqP9uxZO9_GjrAit4k4wxGu11h/view?usp=sharing", 
+4: "https://drive.google.com/file/d/1uZlxC73g_qa3Bv569RTN-IHgDmC4SO3q/view?usp=sharing", 
+5: "https://drive.google.com/file/d/1YdkKELYQFnVX0Cl4GJkRyIMDrTOzlg7i/view?usp=sharing", 
+6: "https://drive.google.com/file/d/1m6JTGHXqNlrZRBqf1unE6GDVAe8BYlRk/view?usp=sharing", 
+7: "https://drive.google.com/file/d/1bh9g2NfhN5-uOd24mB1h7j1wWkDSNuo5/view?usp=sharing", 
+8: "https://drive.google.com/file/d/1WaB66XaOLicv7_-jDghwJxaaz-pWu7wZ/view?usp=sharing", 
+9: "https://drive.google.com/file/d/1ciWIiImBBUbeer6rfccmCjfE53zJXB-Y/view?usp=sharing", 
+10: "https://drive.google.com/file/d/17xbumPh6202mHdAYCwiJhUZKi_aHdPqJ/view?usp=sharing", 
+11: "https://drive.google.com/file/d/19NEzvFWfmHDXbzyJVix6QtN5AaMF1oSq/view?usp=sharing", 
+12: "https://drive.google.com/file/d/1dmllg44szRQi72edj9xmyW0iOBjvmESQ/view?usp=sharing", 
+13: "https://drive.google.com/file/d/1ys8EYEvcqObMT0cKFoIXmMcUkvm6nP5M/view?usp=sharing", 
+14: "https://drive.google.com/file/d/1CbhmEx9AAWdc-a3q0CtcU72KG0ZT9yCE/view?usp=sharing", 
+15: "https://drive.google.com/file/d/1y6f5hak5P-LMvmfecXrBwHhMjS2GMyHl/view?usp=sharing", 
+16: "https://drive.google.com/file/d/11Ha0EYjHeObK9dI1FDPOvdqQ3F7xuUVI/view?usp=sharing", 
+17: "https://drive.google.com/file/d/10QlSU2diMNjRc8jCVqLYnJd2BUy31elN/view?usp=sharing", 
+18: "https://drive.google.com/file/d/1pD01KmGPCM5gy1_58L53tzKYin2Irk6D/view?usp=sharing", 
+19: "https://drive.google.com/file/d/1ufry8I3VUgtBce0r5a9lFt7nXTmpR7Nx/view?usp=sharing" };
+    
+const neemaQA_Links = { 
+1: "https://drive.google.com/file/d/1O4a89dNXMolgw8G7YgAmEE9swMk5tz_r/view?usp=drive_link", 
+2: "https://drive.google.com/file/d/1pAdcYajfxe4E29y11reHcfC5DrFbrFLv/view?usp=drive_link", 
+3: "https://drive.google.com/file/d/1vDbUmqpttoUqsjGE5iJmbd_xw0CX9Hth/view?usp=drive_link", 
+4: "https://drive.google.com/file/d/1XHLlmwcErsagFr_LYAanLRhEubDc71yV/view?usp=drive_link", 
+5: "https://drive.google.com/file/d/1cYk3ZxJZG7TTm3ldDkfQO93Aq1fRtfMG/view?usp=drive_link", 
+6: "https://drive.google.com/file/d/13BSiGMs7MuP0bLANLRs_agGFc3oWCA8W/view?usp=drive_link", 
+7: "https://drive.google.com/file/d/1vFrTXHcrQ2yRkibuBWx-EMQfVkDCVsxI/view?usp=drive_link", 
+8: "https://drive.google.com/file/d/1B6GfF7MeUcw0DCc7aCz_C-aULRGyanyu/view?usp=drive_link", 
+9: "https://drive.google.com/file/d/1hZvlmgpjG2ml9vJu0lNO-OeRMwMxl61o/view?usp=drive_link", 
+10: "https://drive.google.com/file/d/1y3d6bNZFwrmKNwaJRasRgGfNULNXprij/view?usp=drive_link", 
+11: "https://drive.google.com/file/d/1WydqGwINjyB622xTWS6l4bk9jh5WVXi5/view?usp=drive_link", 
+12: "https://drive.google.com/file/d/1o057i6fdKwbNwuxFPGSuCKZByHXEmBdU/view?usp=drive_link", 
+13: "https://drive.google.com/file/d/1YAXKMVzEDRxFDiUppykEnST2DjOHNxlE/view?usp=drive_link", 
+14: "https://drive.google.com/file/d/1iuM07zk08PLYu-LCK5pprCWkqgC-UtyJ/view?usp=drive_link", 
+15: "https://drive.google.com/file/d/1-3o0jsEzy2ENPWBM0_8ZNETC4rrIl8IC/view?usp=drive_link", 
+16: "https://drive.google.com/file/d/1K-zq2g2IXSFKfnJGStWp5FbHX-Olm4bK/view?usp=drive_link", 
+17: "https://drive.google.com/file/d/1xipPfiawjh7N6wY9XbIFGKC9KBZyyFva/view?usp=drive_link", 
+18: "https://drive.google.com/file/d/1Xa0yqHR5ORA0t-v9B8hxftcKjDmMUkOX/view?usp=drive_link", 
+19: "https://drive.google.com/file/d/1VYLc0bHQONyt5PD7923YsO1LPT9ta41I/view?usp=drive_link" };
+    
+    
+// Updated CDC Question & Answers Links
+    const cdcQA_Links = {
+        1: "https://docs.google.com/document/d/1ER9HMD23EZZkNSn6WAtQiJW3QA1RK0Ek/edit?usp=drive_link",
+        2: "https://docs.google.com/document/d/11-yEaqW4iFFPuSZZSIKY_Ktf_lyDESU5/edit?usp=drive_link",
+        3: "https://docs.google.com/document/d/1lPzKHEQL-bnEPW9cCWDKDeq_9rAZ3zQ-/edit?usp=drive_link",
+        4: "https://docs.google.com/document/d/1tRtyRqDUsoCRhi4paxhP_9cJ6QoT0JGL/edit?usp=drive_link",
+        5: "https://docs.google.com/document/d/1XHyACi3WOlqnOR11GdxB2kYCJszC9QCE/edit?usp=drive_link",
+        6: "https://docs.google.com/document/d/1p28rJUG02pXM3X9GXxRHDGS7ASo1lYex/edit?usp=sharing",
+        7: "https://docs.google.com/document/d/1HkJxW2S7MB7NQQrpzfvVr4QLnTu5CPPJ/edit?usp=drive_link",
+        8: "https://docs.google.com/document/d/1Y9HZX6wTP7qWCyu222gTvTTwKMZUNGvM/edit?usp=drive_link",
+        9: "https://docs.google.com/document/d/1edjfV_DdpZOnjQIdDwMmnUka2Ib3Kx3C/edit?usp=drive_link",
+        10: "https://docs.google.com/document/d/1HUwQxfPjqtPA76FiT4CPxlOr2h2lAfmS/edit?usp=drive_link",
+        11: "https://docs.google.com/document/d/1RXlarvMskO4W9B9_LZ6_SQwZ1Dcg7f3Y/edit?usp=drive_link",
+        12: "https://docs.google.com/document/d/1jIfzQ6ok37rD_DkyRiKEBdAcYcl0-EOP/edit?usp=drive_link",
+        13: "https://docs.google.com/document/d/18ctUdVYgbejInY7Ao4HBDubqAM-n6Ol5/edit?usp=drive_link",
+        14: "https://docs.google.com/document/d/1fg-DL7J56S6Ac9JZdxfgyV6XqtPmNTiP/edit?usp=drive_link",
+        15: "https://docs.google.com/document/d/1ucqLmjTygfQn5v57vepTt3WXBimcu31n/edit?usp=drive_link",
+        16: "https://docs.google.com/document/d/15ohe-amAATbZN40iktIe9ef4-CxDxqlz/edit?usp=drive_link",
+        17: "https://docs.google.com/document/d/1im-un_U_vUcSrLX-jV7mwOWQPZxdzpXb/edit?usp=drive_link",
+        18: "https://docs.google.com/document/d/1A059lW_diw_vzmdYH_pbNhnsqqk7YbiV/edit?usp=drive_link",
+        19: "https://docs.google.com/document/d/1s68-qVirVHnbX9fmgYuBj0a6cpMYagLU/edit?usp=drive_link"
+    };
+const Designed_Links = {
+1: "https://docs.google.com/presentation/d/1uDdcvGLTkiAejl-c39828B-HacTgFE_d/edit?usp=drive_link&ouid=101159333343504078423&rtpof=true&sd=true", 
+2: "https://docs.google.com/presentation/d/1RW7Vj-Qu4Ko40sASnO1KJSBQITUwKMks/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
+3: "https://docs.google.com/presentation/d/1PftXXcfUxcz4FrPTIeRR0WKtKWUo9VlG/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
+4: "https://docs.google.com/presentation/d/1exDU-XQZ8s2aEZ3WGOF6v7e55Uo7A-FH/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
+5: "https://docs.google.com/presentation/d/1exDU-XQZ8s2aEZ3WGOF6v7e55Uo7A-FH/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
+6: "https://docs.google.com/presentation/d/1exDU-XQZ8s2aEZ3WGOF6v7e55Uo7A-FH/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
+7: "https://docs.google.com/presentation/d/1IodTn1BAMErcvWCeay_WgyNioasR29Pz/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
+8: "https://docs.google.com/presentation/d/1zaSmsmTmRkGo2cQL3G9H3Oq2U44VnlqR/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
+9: "https://docs.google.com/presentation/d/1-5hxC57PeOp8oUgIrAU4xbxF2KcBHs_x/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
+10: "https://docs.google.com/presentation/d/1K3LWMiKKGCGFtMN6yhHSd1clvBzJ0sFk/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
+11: "https://docs.google.com/presentation/d/1kVylZdXAIs3VRJSAbPYiq6WM6G8jwPAM/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
+12: "https://docs.google.com/presentation/d/1RcCLA_mmSRIWGjnkMPs4YQWnuzsVT3ys/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
+13: "https://docs.google.com/presentation/d/17fiCqmpKc5QmXnkfUgLUGg8Zu15m_0xY/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
+14: "https://docs.google.com/presentation/d/1-Cg4gP6D7_n04BSZchmgBDpan5P5B31l/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
+15: "https://docs.google.com/presentation/d/13SjcI7T8QgBFI31-hxIoRYUfmDVyaCSP/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
+16: "https://docs.google.com/presentation/d/1mUqZT8aQs6qG4ORt-rdCJWeuCyP3jMb9/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
+17: "https://docs.google.com/presentation/d/1Vf8C0YNz7aeBXKyXbUq572qg69A06rnK/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
+18: "https://docs.google.com/presentation/d/1sR6nFTFnWDHauXiP_D91cYO1NohhK9Jb/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
+19: "https://docs.google.com/presentation/d/14T0z8p0DXJBux9bO58nyA6cT1GRSv4eY/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true" };
+
+
+    const lessons = [
+        "Scientific study", "Classification of living things", "Lifecycle of honeybee", 
+        "Heredity", "Physiological structure and life process", "Nature and environment", 
+        "Force and Motion", "Pressure", "Heat", "Wave", "Electricity and Magnetism", 
+        "Universe", "Information and communication technology", "Classification of elements", 
+        "Chemical reaction", "Some gases", "Metals", "Hydrocarbon and its compounds", 
+        "Chemicals used in daily life"
+    ];
+
+    const container = document.getElementById('mainList');
+
+    lessons.forEach((title, index) => {
+        const lessonNum = index + 1;
+        const currentCdcLink = cdcLinks[lessonNum] || "#";
+        const currentModernLink = modernLinks[lessonNum] || "#";
+        const currentNeemaQA = neemaQA_Links[lessonNum] || "#";
+        const currentCdcQA = cdcQA_Links[lessonNum] || "#";
+const currentDesignedLink = Designed_Links[lessonNum] || "#";
+
+
+        const html = `
+            <div class="item">
+                <span class="item-title">${lessonNum}. ${title}</span>
+                <div class="popout-menu">
+                    <div class="has-sub">
+                        📄 PDF Notes
+                        <div class="sub-popout">
+                            <a href="${currentCdcLink}" target="_blank">1. CDC</a>
+                            <a href="${currentModernLink}" target="_blank">2. Modern</a>
+                            <a href="#" target="_blank">3. Sangam's</a>
+                        </div>
+                    </div>
+
+                    <div class="has-sub">
+                        📊 PPT Slides
+                        <div class="sub-popout">
+                            <a href="${currentDesignedLink}" target="_blank">1. Designed</a>
+                            <a href="#" target="_blank">2. AI Assisted</a>
+                            <a href="#" target="_blank">3. NCED</a>
+                        </div>
+                    </div>
+
+                    <div class="has-sub">
+                        🎥 Video Lessons
+                        <div class="sub-popout">
+                            <a href="#" target="_blank">Concept Video</a>
+                        </div>
+                    </div>
+
+                    <div class="has-sub">
+                        ❓ Question Answers
+                        <div class="sub-popout">
+                            <a href="${currentCdcQA}" target="_blank">1. CDC Q&A</a>
+                            <a href="#" target="_blank">2. Modern Q&A</a>
+                            <a href="#" target="_blank">3. Sangam's Q&A</a>
+                            <a href="${currentNeemaQA}" target="_blank">4. Neema Q&A</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        container.innerHTML += html;
+    });
+</script>
+
+</body>
+</html>
