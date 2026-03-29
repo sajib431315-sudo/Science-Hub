@@ -4,507 +4,854 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Science & Technology Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2c3e50;
-            --accent: #27ae60;
-            --bg: #ffffff;
-            --text: #333;
-            --hover-bg: #f8f9fa;
+            --bg: #0a0e1a;
+            --surface: #111827;
+            --surface2: #1a2235;
+            --border: rgba(99, 179, 237, 0.12);
+            --accent: #63b3ed;
+            --accent2: #68d391;
+            --accent3: #f6ad55;
+            --text: #e2e8f0;
+            --muted: #718096;
+            --glow: rgba(99, 179, 237, 0.25);
+            --radius: 12px;
         }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Segoe UI', Roboto, sans-serif;
-            margin: 0;
-            padding: 40px;
-            background-color: var(--bg);
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
+        /* ─── Starfield Background ─── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(99,179,237,0.07) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 80%, rgba(104,211,145,0.05) 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 0%, rgba(246,173,85,0.04) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ─── Header ─── */
         header {
-            margin-bottom: 30px;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-            max-width: 100%;
+            position: relative;
+            z-index: 10;
+            padding: 48px 48px 32px;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(180deg, rgba(10,14,26,0.95) 0%, transparent 100%);
+            backdrop-filter: blur(8px);
         }
 
-        h1 { font-size: 1.8rem; color: var(--primary); margin: 0; }
-        p { color: #7f8c8d; font-size: 0.9rem; margin-top: 5px; }
-
-        .hub-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            max-width: 1300px;
+        .header-inner {
+            max-width: 1280px;
             margin: 0 auto;
-            gap: 50px;
-        }
-
-        .lesson-column { width: 420px; }
-        .board-column { width: 210px; }
-
-        h2 {
-            font-size: 1.1rem;
-            color: var(--primary);
-            margin-bottom: 15px;
-            border-left: 4px solid var(--accent);
-            padding-left: 10px;
-        }
-
-        .list-container {
             display: flex;
-            flex-direction: column;
-            gap: 5px;
-            position: relative;
-        }
-
-        .item {
-            padding: 12px 15px;
-            background: var(--hover-bg);
-            border-radius: 6px;
-            cursor: pointer;
-            position: relative;
-            display: flex;
+            align-items: flex-end;
             justify-content: space-between;
+            gap: 24px;
+        }
+
+        .logo-group { display: flex; flex-direction: column; gap: 8px; }
+
+        .eyebrow {
+            font-size: 0.7rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.1;
+        }
+
+        h1 span { color: var(--accent); }
+
+        .header-desc {
+            font-size: 0.85rem;
+            color: var(--muted);
+            max-width: 380px;
+            line-height: 1.6;
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 32px;
             align-items: center;
-            border: 1px solid transparent;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            color: var(--accent);
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--muted);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        /* ─── Search ─── */
+        .search-bar {
+            max-width: 1280px;
+            margin: 28px auto 0;
+            padding: 0 48px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-input-wrap {
+            position: relative;
+            max-width: 440px;
+        }
+
+        .search-input-wrap svg {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            pointer-events: none;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 12px 16px 12px 44px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 99px;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.88rem;
+            outline: none;
             transition: all 0.2s;
         }
 
-        .item:hover {
+        #searchInput:focus {
             border-color: var(--accent);
-            background: #fff;
-            box-shadow: 4px 4px 15px rgba(0,0,0,0.05);
-            z-index: 100;
+            box-shadow: 0 0 0 3px var(--glow);
         }
 
-        .popout-menu {
-            position: absolute;
-            top: 0;
-            width: 210px;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 10px 10px 30px rgba(0,0,0,0.1);
-            padding: 8px 0;
-            visibility: hidden;
-            opacity: 0;
-            transition: all 0.25s ease;
-        }
+        #searchInput::placeholder { color: var(--muted); }
 
-        /* Direction Logic */
-        .lesson-column .popout-menu { left: 100%; }
-        .board-column .popout-menu { right: 100%; }
-
-        .item:hover > .popout-menu {
-            visibility: visible;
-            opacity: 1;
-        }
-        
-        .lesson-column .item:hover > .popout-menu { transform: translateX(10px); }
-        .board-column .item:hover > .popout-menu { transform: translateX(-10px); }
-
-        /* SUB POPOUT LOGIC */
-        .has-sub {
-            display: block;
-            padding: 10px 20px;
-            color: var(--primary);
-            font-size: 0.9rem;
+        /* ─── Main Layout ─── */
+        main {
             position: relative;
-            text-decoration: none;
+            z-index: 5;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 36px 48px 80px;
+            display: grid;
+            grid-template-columns: 1fr 280px;
+            gap: 48px;
+            align-items: start;
         }
 
-        .has-sub:hover { background: #f1f1f1; color: var(--accent); }
+        /* ─── Section Headings ─── */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
 
-        .sub-popout {
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .section-pill {
+            font-size: 0.68rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 99px;
+            background: rgba(99,179,237,0.12);
+            color: var(--accent);
+            border: 1px solid rgba(99,179,237,0.25);
+        }
+
+        .section-line {
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* ─── Lesson Grid ─── */
+        .lesson-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 14px;
+        }
+
+        .lesson-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 18px 20px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.22s ease;
+            overflow: visible;
+        }
+
+        .lesson-card::before {
+            content: '';
             position: absolute;
-            top: 0;
-            width: 230px;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 10px 10px 30px rgba(0,0,0,0.1);
-            padding: 8px 0;
-            visibility: hidden;
+            inset: 0;
+            border-radius: var(--radius);
+            background: linear-gradient(135deg, rgba(99,179,237,0.06) 0%, transparent 60%);
             opacity: 0;
-            transition: all 0.2s ease;
-            z-index: 101;
+            transition: opacity 0.22s;
         }
 
-        /* Directional Logic for multi-level */
-        .lesson-column .sub-popout { left: 100%; transform: translateX(-5px); }
-        .board-column .sub-popout { right: 100%; transform: translateX(5px); }
+        .lesson-card:hover {
+            border-color: rgba(99,179,237,0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(99,179,237,0.15);
+        }
 
-        .has-sub:hover > .sub-popout {
-            visibility: visible;
+        .lesson-card:hover::before { opacity: 1; }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .card-num {
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: rgba(99,179,237,0.1);
+            border: 1px solid rgba(99,179,237,0.2);
+            border-radius: 6px;
+            padding: 3px 8px;
+            flex-shrink: 0;
+        }
+
+        .card-icon {
+            font-size: 1.1rem;
+            opacity: 0.7;
+        }
+
+        .card-title {
+            font-size: 0.92rem;
+            font-weight: 500;
+            color: var(--text);
+            margin-top: 10px;
+            line-height: 1.4;
+        }
+
+        .card-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 14px;
+        }
+
+        .action-btn {
+            font-size: 0.7rem;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--surface2);
+            color: var(--muted);
+            cursor: pointer;
+            transition: all 0.18s;
+            position: relative;
+        }
+
+        .action-btn:hover {
+            color: var(--text);
+            border-color: rgba(99,179,237,0.3);
+            background: rgba(99,179,237,0.08);
+        }
+
+        /* ─── Dropdown portal (appended to body) ─── */
+        .dropdown-wrap { position: relative; }
+
+        .action-btn.active {
+            color: #fff;
+            border-color: rgba(99,179,237,0.5);
+            background: rgba(99,179,237,0.15);
+            box-shadow: 0 0 0 2px rgba(99,179,237,0.15);
+        }
+
+        /* Hidden source menus — data only, not rendered in-place */
+        .dropdown-menu { display: none; }
+
+        /* The single floating portal panel — appended to body, always on top */
+        #dropdown-portal {
+            position: fixed;
+            z-index: 99999;
+            min-width: 200px;
+            background: #1a2744;
+            border: 1px solid rgba(99,179,237,0.28);
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.75), 0 0 0 1px rgba(99,179,237,0.06);
+            padding: 6px 0;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-6px);
+            transition: opacity 0.15s ease, transform 0.15s ease;
+        }
+
+        #dropdown-portal.visible {
             opacity: 1;
+            pointer-events: all;
+            transform: translateY(0);
         }
 
-        .lesson-column .has-sub:hover > .sub-popout { transform: translateX(5px); }
-        .board-column .has-sub:hover > .sub-popout { transform: translateX(-5px); }
-
-        .popout-menu a {
-            display: block;
-            padding: 10px 20px;
+        #dropdown-portal a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 14px;
+            font-size: 0.8rem;
+            font-family: 'DM Sans', sans-serif;
+            color: #a0aec0;
             text-decoration: none;
-            color: var(--primary);
-            font-size: 0.85rem;
+            transition: all 0.15s;
+            white-space: nowrap;
         }
 
-        .popout-menu a:hover { background: #f9f9f9; color: var(--accent); }
+        #dropdown-portal a:hover {
+            background: rgba(99,179,237,0.10);
+            color: var(--accent);
+        }
 
-        /* Arrows */
-        .lesson-column .has-sub::after { content: '▸'; float: right; opacity: 0.3; }
-        .board-column .has-sub::before { content: '◂'; opacity: 0.3; margin-right: 8px; }
+        #dropdown-portal a .dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--accent);
+            flex-shrink: 0;
+            opacity: 0.5;
+        }
+
+        /* ─── Hidden class for search ─── */
+        .lesson-card.hidden { display: none; }
+
+        /* ─── Board Column ─── */
+        .board-section { position: sticky; top: 24px; }
+
+        .board-cards { display: flex; flex-direction: column; gap: 10px; }
+
+        .board-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: all 0.22s;
+        }
+
+        .board-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .board-card-header:hover { background: var(--surface2); }
+
+        .board-year {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .board-badge {
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 99px;
+        }
+
+        .badge-new { background: rgba(104,211,145,0.15); color: var(--accent2); border: 1px solid rgba(104,211,145,0.25); }
+        .badge-available { background: rgba(99,179,237,0.12); color: var(--accent); border: 1px solid rgba(99,179,237,0.2); }
+        .badge-soon { background: rgba(246,173,85,0.1); color: var(--accent3); border: 1px solid rgba(246,173,85,0.2); }
+
+        .chevron {
+            width: 16px;
+            height: 16px;
+            color: var(--muted);
+            transition: transform 0.22s;
+        }
+
+        .board-card.open .chevron { transform: rotate(180deg); }
+
+        .board-body {
+            display: none;
+            padding: 0 18px 14px;
+        }
+
+        .board-card.open .board-body { display: block; }
+
+        .board-sub-title {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin: 10px 0 6px;
+        }
+
+        .board-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.78rem;
+            color: #a0aec0;
+            transition: all 0.15s;
+            margin-bottom: 2px;
+        }
+
+        .board-link:hover { background: rgba(99,179,237,0.08); color: var(--accent); }
+
+        .board-link svg { width: 13px; height: 13px; flex-shrink: 0; opacity: 0.6; }
+
+        .medium-group { margin-bottom: 8px; }
+
+        .medium-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 10px;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            color: #a0aec0;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .medium-toggle:hover { background: var(--surface2); color: var(--text); }
+
+        .medium-toggle svg { width: 12px; height: 12px; transition: transform 0.18s; }
+
+        .medium-group.open .medium-toggle svg { transform: rotate(90deg); }
+
+        .medium-links { display: none; padding-left: 14px; }
+
+        .medium-group.open .medium-links { display: block; }
+
+        /* ─── Footer ─── */
+        footer {
+            position: relative;
+            z-index: 5;
+            text-align: center;
+            padding: 28px;
+            color: var(--muted);
+            font-size: 0.78rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* ─── Animations ─── */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .lesson-card {
+            animation: fadeInUp 0.4s ease both;
+        }
+
+        /* Staggered delay */
+        .lesson-card:nth-child(1)  { animation-delay: 0.02s; }
+        .lesson-card:nth-child(2)  { animation-delay: 0.04s; }
+        .lesson-card:nth-child(3)  { animation-delay: 0.06s; }
+        .lesson-card:nth-child(4)  { animation-delay: 0.08s; }
+        .lesson-card:nth-child(5)  { animation-delay: 0.10s; }
+        .lesson-card:nth-child(6)  { animation-delay: 0.12s; }
+        .lesson-card:nth-child(7)  { animation-delay: 0.14s; }
+        .lesson-card:nth-child(8)  { animation-delay: 0.16s; }
+        .lesson-card:nth-child(9)  { animation-delay: 0.18s; }
+        .lesson-card:nth-child(10) { animation-delay: 0.20s; }
+        .lesson-card:nth-child(11) { animation-delay: 0.22s; }
+        .lesson-card:nth-child(12) { animation-delay: 0.24s; }
+        .lesson-card:nth-child(13) { animation-delay: 0.26s; }
+        .lesson-card:nth-child(14) { animation-delay: 0.28s; }
+        .lesson-card:nth-child(15) { animation-delay: 0.30s; }
+        .lesson-card:nth-child(16) { animation-delay: 0.32s; }
+        .lesson-card:nth-child(17) { animation-delay: 0.34s; }
+        .lesson-card:nth-child(18) { animation-delay: 0.36s; }
+        .lesson-card:nth-child(19) { animation-delay: 0.38s; }
+
+        /* ─── Responsive ─── */
+        @media (max-width: 900px) {
+            main { grid-template-columns: 1fr; padding: 24px 20px 60px; }
+            header { padding: 28px 20px 24px; }
+            .search-bar { padding: 0 20px; }
+            .header-inner { flex-direction: column; align-items: flex-start; }
+            .board-section { position: static; }
+        }
+
+        /* ─── No-results message ─── */
+        #noResults {
+            display: none;
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 48px;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        /* ─── Empty placeholder text for coming-soon links ─── */
+        .coming-soon {
+            font-size: 0.72rem;
+            color: var(--muted);
+            padding: 4px 10px;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
 
+<!-- ═══ Header ═══ -->
 <header>
-    <h1>Science & Technology Hub</h1>
-    <p>Select a lesson for resources or view SEE Board Exam solutions on the right.</p>
+    <div class="header-inner">
+        <div class="logo-group">
+            <span class="eyebrow">SEE Class 10 · Nepal</span>
+            <h1>Science &amp; <span>Technology</span> Hub</h1>
+            <p class="header-desc">Access lesson notes, slides, Q&amp;A resources and SEE board exam solutions — all in one place.</p>
+        </div>
+        <div class="stats-row">
+            <div class="stat">
+                <div class="stat-num">19</div>
+                <div class="stat-label">Chapters</div>
+            </div>
+            <div class="stat">
+                <div class="stat-num">5+</div>
+                <div class="stat-label">Resource Types</div>
+            </div>
+            <div class="stat">
+                <div class="stat-num">3</div>
+                <div class="stat-label">Exam Years</div>
+            </div>
+        </div>
+    </div>
 </header>
 
-<div class="hub-container">
-    <div class="lesson-column">
-        <h2>Chapter Lessons</h2>
-        <div class="list-container" id="mainList"></div>
+<!-- ═══ Search ═══ -->
+<div class="search-bar">
+    <div class="search-input-wrap">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="searchInput" placeholder="Search chapters…" autocomplete="off">
     </div>
+</div>
 
-    <div class="board-column">
-        <h2>SEE Board Exams</h2>
-        <div class="list-container">
-            <div class="item">
-                <span class="item-title">SEE 2082</span>
-       <div class="popout-menu">
-                    <div class="has-sub">
-                        📝 Question Paper
-                        <div class="sub-popout">
-                            <a href="#" target="_blank">Koshi Province 2082</a>
-                            <a href="#" target="_blank">Madhesh Province 2082</a>
-                            <a href="#" target="_blank">Bagmati Province 2082</a>
-                            <a href="#" target="_blank">Gandaki Province 2082</a>
-                            <a href="#" target="_blank">Lumbini Province 2082</a>
-                            <a href="#" target="_blank">Karnali Province 2082</a>
-                            <a href="#" target="_blank">Sudur Paschim Province 2082</a>
-                        </div>
-                    </div>
+<!-- ═══ Main ═══ -->
+<main>
+    <!-- Lessons Section -->
+    <section>
+        <div class="section-header">
+            <h2>Chapter Lessons</h2>
+            <span class="section-pill">19 topics</span>
+            <div class="section-line"></div>
+        </div>
+        <div class="lesson-grid" id="mainList">
+            <div id="noResults">No chapters match your search.</div>
+        </div>
+    </section>
 
-                    <div class="has-sub">
-                        ✅ Solution Sheet
-                        <div class="sub-popout">
-                            <div class="has-sub">
-                                Nepali Medium
-                                <div class="sub-popout">
-                                    <a href="#" target="_blank">Koshi (Nepali)</a>
-                                    <a href="#" target="_blank">Madhesh (Nepali)</a>
-                                    <a href="#" target="_blank">Bagmati (Nepali)</a>
-                                    <a href="#" target="_blank">Gandaki (Nepali)</a>
-                                    <a href="#" target="_blank">Lumbini (Nepali)</a>
-                                    <a href="#" target="_blank">Karnali (Nepali)</a>
-                                    <a href="#" target="_blank">Sudur Paschim (Nepali)</a>
-                                </div>
-                            </div>
-                            <div class="has-sub">
-                                English Medium
-                                <div class="sub-popout">
-                                    <a href="#" target="_blank">Koshi (English)</a>
-                                    <a href="#" target="_blank">Madhesh (English)</a>
-                                    <a href="#" target="_blank">Bagmati (English)</a>
-                                    <a href="#" target="_blank">Gandaki (English)</a>
-                                    <a href="#" target="_blank">Lumbini (English)</a>
-                                    <a href="#" target="_blank">Karnali (English)</a>
-                                    <a href="#" target="_blank">Sudur Paschim (English)</a>
-                                </div>
-                            </div>
-                        </div>
+    <!-- Board Exams Sidebar -->
+    <aside class="board-section">
+        <div class="section-header">
+            <h2>SEE Board Exams</h2>
+            <div class="section-line"></div>
+        </div>
+        <div class="board-cards">
+
+            <!-- SEE 2082 -->
+            <div class="board-card" id="board2082">
+                <div class="board-card-header" onclick="toggleBoard('board2082')">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <span class="board-year">SEE 2082</span>
+                        <span class="board-badge badge-soon">Coming Soon</span>
                     </div>
+                    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                 </div>
-            </div>           
- <div class="item">
-                <span class="item-title">SEE 2081</span>
-                <div class="popout-menu">
-                    <div class="has-sub">
-                        📝 Question Paper
-                        <div class="sub-popout">
-                            <a href="https://drive.google.com/file/d/10Llck-aPvBy0FQs2H3UIjvTR9FSWetkX/view?usp=sharing" target="_blank">Koshi Province 2081</a>
-                            <a href="https://drive.google.com/file/d/1-ETCUbrAcKcHIFhhArsukp23gofIBFZT/view?usp=sharing" target="_blank">Madhesh Province 2081</a>
-                            <a href="https://drive.google.com/file/d/1HzAT4ipSjQE24noMa4EZ_3JlA5C2sfe9/view?usp=sharing" target="_blank">Bagmati Province 2081</a>
-                            <a href="https://drive.google.com/file/d/1X1v1TDXGDzbXmUN9Y4jOKGf-kBUYMhFj/view?usp=sharing" target="_blank">Gandaki Province 2081</a>
-                            <a href="https://drive.google.com/file/d/1kgrh8WyRAITjOPZZz_5ab_8bTN_M8XVu/view?usp=sharing" target="_blank">Lumbini Province 2081</a>
-                            <a href="https://drive.google.com/file/d/1LdjSPKYukEnKch4F-4LcEwojZhgmQVYT/view?usp=sharing" target="_blank">Karnali Province 2081</a>
-                            <a href="https://drive.google.com/file/d/1e8t9DSgMK8Jv3Xhbg1P3Q8kJ9aalUP6l/view?usp=sharing" target="_blank">Sudur Paschim Province 2081</a>
-                            <a href="https://drive.google.com/file/d/1FMUBUkBZe3TWcE9jyGtPhcKADOWcdvOS/view?usp=sharing" target="_blank">Practice sets</a>
-                        </div>
-                    </div>
-
-                    <div class="has-sub">
-                        ✅ Solution Sheet
-                        <div class="sub-popout">
-                            <div class="has-sub">
-                                Nepali Medium
-                                <div class="sub-popout">
-                                    <a href="https://drive.google.com/file/d/12jUIhWGUQ370UWnOkdjKXn73-pFsIuZb/view?usp=sharing" target="_blank">Koshi (Nepali)</a>
-                                    <a href="https://drive.google.com/file/d/1fP5ftwGOEMxw_KRhkQAitYCJRQ29d3h5/view?usp=sharing" target="_blank">Madhesh (Nepali)</a>
-                                    <a href="https://drive.google.com/file/d/1-7n9YsqEX7BF5k_gqL5jeysBmWp__cUl/view?usp=sharing" target="_blank">Bagmati (Nepali)</a>
-                                    <a href="https://drive.google.com/file/d/1FRVXbJR48e4Q0OLTsu3wTeoHPRPRW0w1/view?usp=sharing" target="_blank">Gandaki (Nepali)</a>
-                                    <a href="https://drive.google.com/file/d/1qR4CdaJqN5efYkHoHhsIguvHBVwZuSIk/view?usp=sharing" target="_blank">Lumbini (Nepali)</a>
-                                    <a href="https://drive.google.com/file/d/1GfOscLgv-4hCLTalP6WlKS5ZVGLdXExL/view?usp=sharing" target="_blank">Karnali (Nepali)</a>
-                                    <a href="https://drive.google.com/file/d/1Swk1udgv0f_7YPlP3BypFU969xZenPGR/view?usp=sharing" target="_blank">Sudur Paschim (Nepali)</a>
-                                </div>
-                            </div>
-                            <div class="has-sub">
-                                English Medium
-                                <div class="sub-popout">
-                                    <a href="https://docs.google.com/document/d/11LCJTiuiSVO_p_iVMAflZOnKdXNriYQn/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true" target="_blank">Koshi (English)</a>
-                                    <a href="https://docs.google.com/document/d/1ryiXdeDBPEUk1i7dl8a88HzzGOwBJ-Vd/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true" target="_blank">Madhesh (English)</a>
-                                    <a href="https://docs.google.com/document/d/1JWhiLlnnYtfHXk70k3YnmPh6F9SL9pCP/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true" target="_blank">Bagmati (English)</a>
-                                    <a href="https://docs.google.com/document/d/1m2cShG6JpewvUv4ZT_sNL1Hwuwe7D24j/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true" target="_blank">Gandaki (English)</a>
-                                    <a href="https://docs.google.com/document/d/1fDH87W9bV-w56tDZfbcG8_idiGdkukOw/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true" target="_blank">Lumbini (English)</a>
-                                    <a href="https://docs.google.com/document/d/1JI6rO1S9iHulMjkjRjZzwx8OoMAlYo-s/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true" target="_blank">Karnali (English)</a>
-                                    <a href="https://docs.google.com/document/d/1PUfC9AIFGmRI-SWrmn8GNv7W2K2pmNxf/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true" target="_blank">Sudur Paschim (English)</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="board-body">
+                    <div class="board-sub-title">📝 Question Papers</div>
+                    <span class="coming-soon">Papers will be added after the exam</span>
+                    <div class="board-sub-title">✅ Solution Sheets</div>
+                    <span class="coming-soon">Solutions will be uploaded soon</span>
                 </div>
             </div>
 
-            <div class="item">
-                <span class="item-title">SEE 2080</span>
-               <div class="popout-menu">
-                    <div class="has-sub">
-                        📝 Question Paper
-                        <div class="sub-popout">
-                            <a href="#" target="_blank">Koshi Province 2080</a>
-                            <a href="#" target="_blank">Madhesh Province 2080</a>
-                            <a href="#" target="_blank">Bagmati Province 2080</a>
-                            <a href="#" target="_blank">Gandaki Province 2080</a>
-                            <a href="#" target="_blank">Lumbini Province 2080</a>
-                            <a href="#" target="_blank">Karnali Province 2080</a>
-                            <a href="#" target="_blank">Sudur Paschim Province 2080</a>
-                            <a href="#" target="_blank">Set 1</a> 
-                            <a href="#" target="_blank">Set 2</a> 
-                            <a href="#" target="_blank">Set 3</a> 
-                            <a href="#" target="_blank">Grade increasement</a> 
-                        </div>
+            <!-- SEE 2081 -->
+            <div class="board-card open" id="board2081">
+                <div class="board-card-header" onclick="toggleBoard('board2081')">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <span class="board-year">SEE 2081</span>
+                        <span class="board-badge badge-available">Available</span>
                     </div>
+                    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+                <div class="board-body">
+                    <div class="board-sub-title">📝 Question Papers</div>
+                    <a class="board-link" href="https://drive.google.com/file/d/10Llck-aPvBy0FQs2H3UIjvTR9FSWetkX/view?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Koshi Province</a>
+                    <a class="board-link" href="https://drive.google.com/file/d/1-ETCUbrAcKcHIFhhArsukp23gofIBFZT/view?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Madhesh Province</a>
+                    <a class="board-link" href="https://drive.google.com/file/d/1HzAT4ipSjQE24noMa4EZ_3JlA5C2sfe9/view?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Bagmati Province</a>
+                    <a class="board-link" href="https://drive.google.com/file/d/1X1v1TDXGDzbXmUN9Y4jOKGf-kBUYMhFj/view?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Gandaki Province</a>
+                    <a class="board-link" href="https://drive.google.com/file/d/1kgrh8WyRAITjOPZZz_5ab_8bTN_M8XVu/view?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Lumbini Province</a>
+                    <a class="board-link" href="https://drive.google.com/file/d/1LdjSPKYukEnKch4F-4LcEwojZhgmQVYT/view?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Karnali Province</a>
+                    <a class="board-link" href="https://drive.google.com/file/d/1e8t9DSgMK8Jv3Xhbg1P3Q8kJ9aalUP6l/view?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Sudur Paschim</a>
+                    <a class="board-link" href="https://drive.google.com/file/d/1FMUBUkBZe3TWcE9jyGtPhcKADOWcdvOS/view?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Practice Sets</a>
 
-                    <div class="has-sub">
-                        ✅ Solution Sheet
-                        <div class="sub-popout">
-                            <div class="has-sub">
-                                Nepali Medium
-                                <div class="sub-popout">
-                                    <a href="https://drive.google.com/file/d/1yRu23ApVG1-5ZwegtSwMXOSaWyjWulUa/view?usp=sharing" target="_blank">Koshi (Nepali)</a>
-                                    <a href="https://drive.google.com/file/d/1e3FgTaphybOMefRs37qCeCA45jrhS31e/view?usp=sharing" target="_blank">Madhesh (Nepali)</a>
-                                    <a href="https://drive.google.com/file/d/1705VA68NCFFtodtlPyB7DZR8V93ncie8/view?usp=sharing" target="_blank">Bagmati (Nepali)</a>
-                                    <a href="https://drive.google.com/file/d/1SWUj1r50ZiZDtLKvha5PeZhAfG6AaKHD/view?usp=sharing" target="_blank">Gandaki (Nepali)</a>
-                                    <a href="https://drive.google.com/file/d/1hzMBJ-WGc6MN9ziReUEvbShBOP8RCeRE/view?usp=sharing" target="_blank">Lumbini (Nepali)</a>
-                                    <a href="https://drive.google.com/file/d/1mJJIHYVPoh1D3uWfHu6CVk9cJlhQJPuI/view?usp=sharing" target="_blank">Karnali (Nepali)</a>
-                                    <a href="https://drive.google.com/file/d/1JvPAojjQtH4eXT6SumthE51s9aKZ0b25/view?usp=sharing" target="_blank">Sudur Paschim (Nepali)</a>
-                                    <a href="https://drive.google.com/file/d/1yxvgyKzIYsI8wXKH_rg_QuE1GgC_thB_/view?usp=sharing" target="_blank">Set 1(Nepali)</a> 
-                                    <a href="https://drive.google.com/file/d/1tnUNFSxdVEYaHLDK4EHYa2AV7j_AbAkt/view?usp=sharing" target="_blank">Set 2(Nepali)</a> 
-                                    <a href="https://drive.google.com/file/d/1F2zMTDwGIhXhghcRO5Hk3OUtrg_qZPua/view?usp=sharing" target="_blank">Set 3(Nepali)</a> 
-                                    <a href="https://drive.google.com/file/d/1dmA3Zi21KuaJjRz-i9WCP2Y72CtDdpUI/view?usp=sharing" target="_blank">Grade increasement(Nepali)</a> 
-                                </div>
-                            </div>
-                            <div class="has-sub">
-                                English Medium
-                                <div class="sub-popout">
-                                    <a href="#" target="_blank">Koshi (English)</a>
-                                    <a href="#" target="_blank">Madhesh (English)</a>
-                                    <a href="#" target="_blank">Bagmati (English)</a>
-                                    <a href="#" target="_blank">Gandaki (English)</a>
-                                    <a href="#" target="_blank">Lumbini (English)</a>
-                                    <a href="#" target="_blank">Karnali (English)</a>
-                                    <a href="#" target="_blank">Sudur Paschim (English)</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="board-sub-title">✅ Solutions — Nepali Medium</div>
+                    <a class="board-link" href="https://drive.google.com/file/d/12jUIhWGUQ370UWnOkdjKXn73-pFsIuZb/view?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Koshi (Nepali)</a>
+                    <a class="board-link" href="https://drive.google.com/file/d/1fP5ftwGOEMxw_KRhkQAitYCJRQ29d3h5/view?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Madhesh (Nepali)</a>
+                    <a class="board-link" href="https://drive.google.com/file/d/1-7n9YsqEX7BF5k_gqL5jeysBmWp__cUl/view?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Bagmati (Nepali)</a>
+                    <a class="board-link" href="https://drive.google.com/file/d/1FRVXbJR48e4Q0OLTsu3wTeoHPRPRW0w1/view?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Gandaki (Nepali)</a>
+                    <a class="board-link" href="https://drive.google.com/file/d/1qR4CdaJqN5efYkHoHhsIguvHBVwZuSIk/view?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Lumbini (Nepali)</a>
+                    <a class="board-link" href="https://drive.google.com/file/d/1GfOscLgv-4hCLTalP6WlKS5ZVGLdXExL/view?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Karnali (Nepali)</a>
+                    <a class="board-link" href="https://drive.google.com/file/d/1Swk1udgv0f_7YPlP3BypFU969xZenPGR/view?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Sudur Paschim (Nepali)</a>
+
+                    <div class="board-sub-title">✅ Solutions — English Medium</div>
+                    <a class="board-link" href="https://docs.google.com/document/d/11LCJTiuiSVO_p_iVMAflZOnKdXNriYQn/edit?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Koshi (English)</a>
+                    <a class="board-link" href="https://docs.google.com/document/d/1ryiXdeDBPEUk1i7dl8a88HzzGOwBJ-Vd/edit?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Madhesh (English)</a>
+                    <a class="board-link" href="https://docs.google.com/document/d/1JWhiLlnnYtfHXk70k3YnmPh6F9SL9pCP/edit?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Bagmati (English)</a>
+                    <a class="board-link" href="https://docs.google.com/document/d/1m2cShG6JpewvUv4ZT_sNL1Hwuwe7D24j/edit?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Gandaki (English)</a>
                 </div>
             </div>
 
+            <!-- SEE 2080 -->
+            <div class="board-card" id="board2080">
+                <div class="board-card-header" onclick="toggleBoard('board2080')">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <span class="board-year">SEE 2080</span>
+                        <span class="board-badge badge-available">Available</span>
+                    </div>
+                    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+                <div class="board-body">
+                    <div class="board-sub-title">📝 Question Papers</div>
+                    <span class="coming-soon">Links coming soon</span>
 
+                    <div class="board-sub-title">✅ Solutions — Nepali Medium</div>
+                    <a class="board-link" href="https://drive.google.com/file/d/1yRu23ApVG1-5ZwegtSwMXOSaWyjWulUa/view?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Koshi (Nepali)</a>
+                    <a class="board-link" href="https://drive.google.com/file/d/1e3FgTaphybOMefRs37qCeCA45jrhS31e/view?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Madhesh (Nepali)</a>
+                    <a class="board-link" href="https://drive.google.com/file/d/1705VA68NCFFtodtlPyB7DZR8V93ncie8/view?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Bagmati (Nepali)</a>
+                    <a class="board-link" href="https://drive.google.com/file/d/1SWUj1r50ZiZDtLKvha5PeZhAfG6AaKHD/view?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Gandaki (Nepali)</a>
+                    <a class="board-link" href="https://drive.google.com/file/d/1hzMBJ-WGc6MN9ziReUEvbShBOP8RCeRE/view?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Lumbini (Nepali)</a>
+                    <a class="board-link" href="https://drive.google.com/file/d/1mJJIHYVPoh1D3uWfHu6CVk9cJlhQJPuI/view?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Karnali (Nepali)</a>
+                    <a class="board-link" href="https://drive.google.com/file/d/1JvPAojjQtH4eXT6SumthE51s9aKZ0b25/view?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Sudur Paschim (Nepali)</a>
+                    <a class="board-link" href="https://drive.google.com/file/d/1yxvgyKzIYsI8wXKH_rg_QuE1GgC_thB_/view?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Set 1 (Nepali)</a>
+                    <a class="board-link" href="https://drive.google.com/file/d/1tnUNFSxdVEYaHLDK4EHYa2AV7j_AbAkt/view?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Set 2 (Nepali)</a>
+                    <a class="board-link" href="https://drive.google.com/file/d/1F2zMTDwGIhXhghcRO5Hk3OUtrg_qZPua/view?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Set 3 (Nepali)</a>
+                    <a class="board-link" href="https://drive.google.com/file/d/1dmA3Zi21KuaJjRz-i9WBO72CtDdpUI/view?usp=sharing" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Grade Inc. (Nepali)</a>
 
+                    <div class="board-sub-title">✅ Solutions — English Medium</div>
+                    <span class="coming-soon">English medium links coming soon</span>
+                </div>
+            </div>
 
+        </div>
+    </aside>
+</main>
 
-
+<footer>
+    Science &amp; Technology Hub · SEE Class 10 Resources · Nepal
+</footer>
 
 <script>
-       // Link Data
-    const cdcLinks = { 
-1: "https://drive.google.com/file/d/1ND8tgxusuOUIdBYbsEFabl_AS7LhJzZI/view?usp=sharing", 
-2: "https://drive.google.com/file/d/1u8WEwj3fsgL6TolfEyZwZ7dtm1-g-1xj/view?usp=sharing", 
-3: "https://drive.google.com/file/d/122eCgUmth14pfEdRJjBigj3aj1oywLJi/view?usp=sharing", 
-4: "https://drive.google.com/file/d/1ldUHlpFm8s8viHI2LxePLTAJC-1gR3Yf/view?usp=sharing", 
-5: "https://drive.google.com/file/d/1LP-AkkcJW7H9WvAxHsnFp5Xkh4AcDspC/view?usp=sharing", 
-6: "https://drive.google.com/file/d/1_oYH9f0PFq_x3hgV9LTfJAzHsizsYr8v/view?usp=sharing", 
-7: "https://drive.google.com/file/d/12WQmR109GOywkFsQFMPuZ0oFp1IyvHS8/view?usp=sharing", 
-8: "https://drive.google.com/file/d/1G4jeZpcyM-w3AjqtnRBIddTbjvejR-l6/view?usp=sharing", 
-9: "https://drive.google.com/file/d/1XUw3SvNlwviJb7IBtpJjFRw4LBbAOuWc/view?usp=sharing", 
-10: "https://drive.google.com/file/d/1tS078XwQwZKivRpqsMFEUkYiDxYG9eZv/view?usp=sharing", 
-11: "https://drive.google.com/file/d/1ED1rc9ymh6kTeVlfNoyc72d2guAkQHR-/view?usp=sharing", 
-12: "https://drive.google.com/file/d/1RhTmIBhbEZafgB3T7ImfCGxgQWkTPOvc/view?usp=sharing", 
-13: "https://drive.google.com/file/d/1HnYyymnk8Af-l-j0trQzQB6HUf2GiYKy/view?usp=sharing", 
-14: "https://drive.google.com/file/d/1NzGjX0MYj0ZVnj99sIq95nMF1URUNs3m/view?usp=sharing", 
-15: "https://drive.google.com/file/d/1UCvf8d5JqCZ2sWLOzIqWSTlfQF5JJcIc/view?usp=sharing", 
-16: "https://drive.google.com/file/d/1XazsywjvTrmGcQo9eGWlVYGy0STBkLpr/view?usp=sharing", 
-17: "https://drive.google.com/file/d/1yWlkrDPSKw0KaJKp-50TPuj7GNbOxDGg/view?usp=sharing", 
-18: "https://drive.google.com/file/d/1P36-QCQeJq0uAt6BoGeSshRmW_u-8M_3/view?usp=sharing", 
-19: "https://drive.google.com/file/d/1d3Ee_s8DIRHaOzrVZpErSkxcqSMq8RVg/view?usp=sharing" };
-    
-const modernLinks = { 
-1: "https://drive.google.com/file/d/1B_DPZQKESwNUl1LLpLZgD2aeu8M4yrjM/view?usp=sharing", 
-2: "https://drive.google.com/file/d/1qG1OPOIzWiAxoTT-A8nbDdg7UUGiwDby/view?usp=sharing", 
-3: "https://drive.google.com/file/d/1Z-TOALgqP9uxZO9_GjrAit4k4wxGu11h/view?usp=sharing", 
-4: "https://drive.google.com/file/d/1uZlxC73g_qa3Bv569RTN-IHgDmC4SO3q/view?usp=sharing", 
-5: "https://drive.google.com/file/d/1YdkKELYQFnVX0Cl4GJkRyIMDrTOzlg7i/view?usp=sharing", 
-6: "https://drive.google.com/file/d/1m6JTGHXqNlrZRBqf1unE6GDVAe8BYlRk/view?usp=sharing", 
-7: "https://drive.google.com/file/d/1bh9g2NfhN5-uOd24mB1h7j1wWkDSNuo5/view?usp=sharing", 
-8: "https://drive.google.com/file/d/1WaB66XaOLicv7_-jDghwJxaaz-pWu7wZ/view?usp=sharing", 
-9: "https://drive.google.com/file/d/1ciWIiImBBUbeer6rfccmCjfE53zJXB-Y/view?usp=sharing", 
-10: "https://drive.google.com/file/d/17xbumPh6202mHdAYCwiJhUZKi_aHdPqJ/view?usp=sharing", 
-11: "https://drive.google.com/file/d/19NEzvFWfmHDXbzyJVix6QtN5AaMF1oSq/view?usp=sharing", 
-12: "https://drive.google.com/file/d/1dmllg44szRQi72edj9xmyW0iOBjvmESQ/view?usp=sharing", 
-13: "https://drive.google.com/file/d/1ys8EYEvcqObMT0cKFoIXmMcUkvm6nP5M/view?usp=sharing", 
-14: "https://drive.google.com/file/d/1CbhmEx9AAWdc-a3q0CtcU72KG0ZT9yCE/view?usp=sharing", 
-15: "https://drive.google.com/file/d/1y6f5hak5P-LMvmfecXrBwHhMjS2GMyHl/view?usp=sharing", 
-16: "https://drive.google.com/file/d/11Ha0EYjHeObK9dI1FDPOvdqQ3F7xuUVI/view?usp=sharing", 
-17: "https://drive.google.com/file/d/10QlSU2diMNjRc8jCVqLYnJd2BUy31elN/view?usp=sharing", 
-18: "https://drive.google.com/file/d/1pD01KmGPCM5gy1_58L53tzKYin2Irk6D/view?usp=sharing", 
-19: "https://drive.google.com/file/d/1ufry8I3VUgtBce0r5a9lFt7nXTmpR7Nx/view?usp=sharing" };
-    
-const neemaQA_Links = { 
-1: "https://drive.google.com/file/d/1O4a89dNXMolgw8G7YgAmEE9swMk5tz_r/view?usp=drive_link", 
-2: "https://drive.google.com/file/d/1pAdcYajfxe4E29y11reHcfC5DrFbrFLv/view?usp=drive_link", 
-3: "https://drive.google.com/file/d/1vDbUmqpttoUqsjGE5iJmbd_xw0CX9Hth/view?usp=drive_link", 
-4: "https://drive.google.com/file/d/1XHLlmwcErsagFr_LYAanLRhEubDc71yV/view?usp=drive_link", 
-5: "https://drive.google.com/file/d/1cYk3ZxJZG7TTm3ldDkfQO93Aq1fRtfMG/view?usp=drive_link", 
-6: "https://drive.google.com/file/d/13BSiGMs7MuP0bLANLRs_agGFc3oWCA8W/view?usp=drive_link", 
-7: "https://drive.google.com/file/d/1vFrTXHcrQ2yRkibuBWx-EMQfVkDCVsxI/view?usp=drive_link", 
-8: "https://drive.google.com/file/d/1B6GfF7MeUcw0DCc7aCz_C-aULRGyanyu/view?usp=drive_link", 
-9: "https://drive.google.com/file/d/1hZvlmgpjG2ml9vJu0lNO-OeRMwMxl61o/view?usp=drive_link", 
-10: "https://drive.google.com/file/d/1y3d6bNZFwrmKNwaJRasRgGfNULNXprij/view?usp=drive_link", 
-11: "https://drive.google.com/file/d/1WydqGwINjyB622xTWS6l4bk9jh5WVXi5/view?usp=drive_link", 
-12: "https://drive.google.com/file/d/1o057i6fdKwbNwuxFPGSuCKZByHXEmBdU/view?usp=drive_link", 
-13: "https://drive.google.com/file/d/1YAXKMVzEDRxFDiUppykEnST2DjOHNxlE/view?usp=drive_link", 
-14: "https://drive.google.com/file/d/1iuM07zk08PLYu-LCK5pprCWkqgC-UtyJ/view?usp=drive_link", 
-15: "https://drive.google.com/file/d/1-3o0jsEzy2ENPWBM0_8ZNETC4rrIl8IC/view?usp=drive_link", 
-16: "https://drive.google.com/file/d/1K-zq2g2IXSFKfnJGStWp5FbHX-Olm4bK/view?usp=drive_link", 
-17: "https://drive.google.com/file/d/1xipPfiawjh7N6wY9XbIFGKC9KBZyyFva/view?usp=drive_link", 
-18: "https://drive.google.com/file/d/1Xa0yqHR5ORA0t-v9B8hxftcKjDmMUkOX/view?usp=drive_link", 
-19: "https://drive.google.com/file/d/1VYLc0bHQONyt5PD7923YsO1LPT9ta41I/view?usp=drive_link" };
-    
-    
-// Updated CDC Question & Answers Links
-    const cdcQA_Links = {
-        1: "https://docs.google.com/document/d/1ER9HMD23EZZkNSn6WAtQiJW3QA1RK0Ek/edit?usp=drive_link",
-        2: "https://docs.google.com/document/d/11-yEaqW4iFFPuSZZSIKY_Ktf_lyDESU5/edit?usp=drive_link",
-        3: "https://docs.google.com/document/d/1lPzKHEQL-bnEPW9cCWDKDeq_9rAZ3zQ-/edit?usp=drive_link",
-        4: "https://docs.google.com/document/d/1tRtyRqDUsoCRhi4paxhP_9cJ6QoT0JGL/edit?usp=drive_link",
-        5: "https://docs.google.com/document/d/1XHyACi3WOlqnOR11GdxB2kYCJszC9QCE/edit?usp=drive_link",
-        6: "https://docs.google.com/document/d/1p28rJUG02pXM3X9GXxRHDGS7ASo1lYex/edit?usp=sharing",
-        7: "https://docs.google.com/document/d/1HkJxW2S7MB7NQQrpzfvVr4QLnTu5CPPJ/edit?usp=drive_link",
-        8: "https://docs.google.com/document/d/1Y9HZX6wTP7qWCyu222gTvTTwKMZUNGvM/edit?usp=drive_link",
-        9: "https://docs.google.com/document/d/1edjfV_DdpZOnjQIdDwMmnUka2Ib3Kx3C/edit?usp=drive_link",
-        10: "https://docs.google.com/document/d/1HUwQxfPjqtPA76FiT4CPxlOr2h2lAfmS/edit?usp=drive_link",
-        11: "https://docs.google.com/document/d/1RXlarvMskO4W9B9_LZ6_SQwZ1Dcg7f3Y/edit?usp=drive_link",
-        12: "https://docs.google.com/document/d/1jIfzQ6ok37rD_DkyRiKEBdAcYcl0-EOP/edit?usp=drive_link",
-        13: "https://docs.google.com/document/d/18ctUdVYgbejInY7Ao4HBDubqAM-n6Ol5/edit?usp=drive_link",
-        14: "https://docs.google.com/document/d/1fg-DL7J56S6Ac9JZdxfgyV6XqtPmNTiP/edit?usp=drive_link",
-        15: "https://docs.google.com/document/d/1ucqLmjTygfQn5v57vepTt3WXBimcu31n/edit?usp=drive_link",
-        16: "https://docs.google.com/document/d/15ohe-amAATbZN40iktIe9ef4-CxDxqlz/edit?usp=drive_link",
-        17: "https://docs.google.com/document/d/1im-un_U_vUcSrLX-jV7mwOWQPZxdzpXb/edit?usp=drive_link",
-        18: "https://docs.google.com/document/d/1A059lW_diw_vzmdYH_pbNhnsqqk7YbiV/edit?usp=drive_link",
-        19: "https://docs.google.com/document/d/1s68-qVirVHnbX9fmgYuBj0a6cpMYagLU/edit?usp=drive_link"
-    };
-const Designed_Links = {
-1: "https://docs.google.com/presentation/d/1uDdcvGLTkiAejl-c39828B-HacTgFE_d/edit?usp=drive_link&ouid=101159333343504078423&rtpof=true&sd=true", 
-2: "https://docs.google.com/presentation/d/1RW7Vj-Qu4Ko40sASnO1KJSBQITUwKMks/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
-3: "https://docs.google.com/presentation/d/1PftXXcfUxcz4FrPTIeRR0WKtKWUo9VlG/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
-4: "https://docs.google.com/presentation/d/1exDU-XQZ8s2aEZ3WGOF6v7e55Uo7A-FH/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
-5: "https://docs.google.com/presentation/d/1exDU-XQZ8s2aEZ3WGOF6v7e55Uo7A-FH/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
-6: "https://docs.google.com/presentation/d/1exDU-XQZ8s2aEZ3WGOF6v7e55Uo7A-FH/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
-7: "https://docs.google.com/presentation/d/1IodTn1BAMErcvWCeay_WgyNioasR29Pz/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
-8: "https://docs.google.com/presentation/d/1zaSmsmTmRkGo2cQL3G9H3Oq2U44VnlqR/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
-9: "https://docs.google.com/presentation/d/1-5hxC57PeOp8oUgIrAU4xbxF2KcBHs_x/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
-10: "https://docs.google.com/presentation/d/1K3LWMiKKGCGFtMN6yhHSd1clvBzJ0sFk/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
-11: "https://docs.google.com/presentation/d/1kVylZdXAIs3VRJSAbPYiq6WM6G8jwPAM/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
-12: "https://docs.google.com/presentation/d/1RcCLA_mmSRIWGjnkMPs4YQWnuzsVT3ys/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
-13: "https://docs.google.com/presentation/d/17fiCqmpKc5QmXnkfUgLUGg8Zu15m_0xY/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
-14: "https://docs.google.com/presentation/d/1-Cg4gP6D7_n04BSZchmgBDpan5P5B31l/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
-15: "https://docs.google.com/presentation/d/13SjcI7T8QgBFI31-hxIoRYUfmDVyaCSP/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
-16: "https://docs.google.com/presentation/d/1mUqZT8aQs6qG4ORt-rdCJWeuCyP3jMb9/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
-17: "https://docs.google.com/presentation/d/1Vf8C0YNz7aeBXKyXbUq572qg69A06rnK/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
-18: "https://docs.google.com/presentation/d/1sR6nFTFnWDHauXiP_D91cYO1NohhK9Jb/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true", 
-19: "https://docs.google.com/presentation/d/14T0z8p0DXJBux9bO58nyA6cT1GRSv4eY/edit?usp=sharing&ouid=101159333343504078423&rtpof=true&sd=true" };
+    // ─── Data ───
+    const cdcLinks = { 1:"https://drive.google.com/file/d/1ND8tgxusuOUIdBYbsEFabl_AS7LhJzZI/view?usp=sharing", 2:"https://drive.google.com/file/d/1u8WEwj3fsgL6TolfEyZwZ7dtm1-g-1xj/view?usp=sharing", 3:"https://drive.google.com/file/d/122eCgUmth14pfEdRJjBigj3aj1oywLJi/view?usp=sharing", 4:"https://drive.google.com/file/d/1ldUHlpFm8s8viHI2LxePLTAJC-1gR3Yf/view?usp=sharing", 5:"https://drive.google.com/file/d/1LP-AkkcJW7H9WvAxHsnFp5Xkh4AcDspC/view?usp=sharing", 6:"https://drive.google.com/file/d/1_oYH9f0PFq_x3hgV9LTfJAzHsizsYr8v/view?usp=sharing", 7:"https://drive.google.com/file/d/12WQmR109GOywkFsQFMPuZ0oFp1IyvHS8/view?usp=sharing", 8:"https://drive.google.com/file/d/1G4jeZpcyM-w3AjqtnRBIddTbjvejR-l6/view?usp=sharing", 9:"https://drive.google.com/file/d/1XUw3SvNlwviJb7IBtpJjFRw4LBbAOuWc/view?usp=sharing", 10:"https://drive.google.com/file/d/1tS078XwQwZKivRpqsMFEUkYiDxYG9eZv/view?usp=sharing", 11:"https://drive.google.com/file/d/1ED1rc9ymh6kTeVlfNoyc72d2guAkQHR-/view?usp=sharing", 12:"https://drive.google.com/file/d/1RhTmIBhbEZafgB3T7ImfCGxgQWkTPOvc/view?usp=sharing", 13:"https://drive.google.com/file/d/1HnYyymnk8Af-l-j0trQzQB6HUf2GiYKy/view?usp=sharing", 14:"https://drive.google.com/file/d/1NzGjX0MYj0ZVnj99sIq95nMF1URUNs3m/view?usp=sharing", 15:"https://drive.google.com/file/d/1UCvf8d5JqCZ2sWLOzIqWSTlfQF5JJcIc/view?usp=sharing", 16:"https://drive.google.com/file/d/1XazsywjvTrmGcQo9eGWlVYGy0STBkLpr/view?usp=sharing", 17:"https://drive.google.com/file/d/1yWlkrDPSKw0KaJKp-50TPuj7GNbOxDGg/view?usp=sharing", 18:"https://drive.google.com/file/d/1P36-QCQeJq0uAt6BoGeSshRmW_u-8M_3/view?usp=sharing", 19:"https://drive.google.com/file/d/1d3Ee_s8DIRHaOzrVZpErSkxcqSMq8RVg/view?usp=sharing" };
+    const modernLinks = { 1:"https://drive.google.com/file/d/1B_DPZQKESwNUl1LLpLZgD2aeu8M4yrjM/view?usp=sharing", 2:"https://drive.google.com/file/d/1qG1OPOIzWiAxoTT-A8nbDdg7UUGiwDby/view?usp=sharing", 3:"https://drive.google.com/file/d/1Z-TOALgqP9uxZO9_GjrAit4k4wxGu11h/view?usp=sharing", 4:"https://drive.google.com/file/d/1uZlxC73g_qa3Bv569RTN-IHgDmC4SO3q/view?usp=sharing", 5:"https://drive.google.com/file/d/1YdkKELYQFnVX0Cl4GJkRyIMDrTOzlg7i/view?usp=sharing", 6:"https://drive.google.com/file/d/1m6JTGHXqNlrZRBqf1unE6GDVAe8BYlRk/view?usp=sharing", 7:"https://drive.google.com/file/d/1bh9g2NfhN5-uOd24mB1h7j1wWkDSNuo5/view?usp=sharing", 8:"https://drive.google.com/file/d/1WaB66XaOLicv7_-jDghwJxaaz-pWu7wZ/view?usp=sharing", 9:"https://drive.google.com/file/d/1ciWIiImBBUbeer6rfccmCjfE53zJXB-Y/view?usp=sharing", 10:"https://drive.google.com/file/d/17xbumPh6202mHdAYCwiJhUZKi_aHdPqJ/view?usp=sharing", 11:"https://drive.google.com/file/d/19NEzvFWfmHDXbzyJVix6QtN5AaMF1oSq/view?usp=sharing", 12:"https://drive.google.com/file/d/1dmllg44szRQi72edj9xmyW0iOBjvmESQ/view?usp=sharing", 13:"https://drive.google.com/file/d/1ys8EYEvcqObMT0cKFoIXmMcUkvm6nP5M/view?usp=sharing", 14:"https://drive.google.com/file/d/1CbhmEx9AAWdc-a3q0CtcU72KG0ZT9yCE/view?usp=sharing", 15:"https://drive.google.com/file/d/1y6f5hak5P-LMvmfecXrBwHhMjS2GMyHl/view?usp=sharing", 16:"https://drive.google.com/file/d/11Ha0EYjHeObK9dI1FDPOvdqQ3F7xuUVI/view?usp=sharing", 17:"https://drive.google.com/file/d/10QlSU2diMNjRc8jCVqLYnJd2BUy31elN/view?usp=sharing", 18:"https://drive.google.com/file/d/1pD01KmGPCM5gy1_58L53tzKYin2Irk6D/view?usp=sharing", 19:"https://drive.google.com/file/d/1ufry8I3VUgtBce0r5a9lFt7nXTmpR7Nx/view?usp=sharing" };
+    const neemaQA = { 1:"https://drive.google.com/file/d/1O4a89dNXMolgw8G7YgAmEE9swMk5tz_r/view?usp=drive_link", 2:"https://drive.google.com/file/d/1pAdcYajfxe4E29y11reHcfC5DrFbrFLv/view?usp=drive_link", 3:"https://drive.google.com/file/d/1vDbUmqpttoUqsjGE5iJmbd_xw0CX9Hth/view?usp=drive_link", 4:"https://drive.google.com/file/d/1XHLlmwcErsagFr_LYAanLRhEubDc71yV/view?usp=drive_link", 5:"https://drive.google.com/file/d/1cYk3ZxJZG7TTm3ldDkfQO93Aq1fRtfMG/view?usp=drive_link", 6:"https://drive.google.com/file/d/13BSiGMs7MuP0bLANLRs_agGFc3oWCA8W/view?usp=drive_link", 7:"https://drive.google.com/file/d/1vFrTXHcrQ2yRkibuBWx-EMQfVkDCVsxI/view?usp=drive_link", 8:"https://drive.google.com/file/d/1B6GfF7MeUcw0DCc7aCz_C-aULRGyanyu/view?usp=drive_link", 9:"https://drive.google.com/file/d/1hZvlmgpjG2ml9vJu0lNO-OeRMwMxl61o/view?usp=drive_link", 10:"https://drive.google.com/file/d/1y3d6bNZFwrmKNwaJRasRgGfNULNXprij/view?usp=drive_link", 11:"https://drive.google.com/file/d/1WydqGwINjyB622xTWS6l4bk9jh5WVXi5/view?usp=drive_link", 12:"https://drive.google.com/file/d/1o057i6fdKwbNwuxFPGSuCKZByHXEmBdU/view?usp=drive_link", 13:"https://drive.google.com/file/d/1YAXKMVzEDRxFDiUppykEnST2DjOHNxlE/view?usp=drive_link", 14:"https://drive.google.com/file/d/1iuM07zk08PLYu-LCK5pprCWkqgC-UtyJ/view?usp=drive_link", 15:"https://drive.google.com/file/d/1-3o0jsEzy2ENPWBM0_8ZNETC4rrIl8IC/view?usp=drive_link", 16:"https://drive.google.com/file/d/1K-zq2g2IXSFKfnJGStWp5FbHX-Olm4bK/view?usp=drive_link", 17:"https://drive.google.com/file/d/1xipPfiawjh7N6wY9XbIFGKC9KBZyyFva/view?usp=drive_link", 18:"https://drive.google.com/file/d/1Xa0yqHR5ORA0t-v9B8hxftcKjDmMUkOX/view?usp=drive_link", 19:"https://drive.google.com/file/d/1VYLc0bHQONyt5PD7923YsO1LPT9ta41I/view?usp=drive_link" };
+    const cdcQA = { 1:"https://docs.google.com/document/d/1ER9HMD23EZZkNSn6WAtQiJW3QA1RK0Ek/edit?usp=drive_link", 2:"https://docs.google.com/document/d/11-yEaqW4iFFPuSZZSIKY_Ktf_lyDESU5/edit?usp=drive_link", 3:"https://docs.google.com/document/d/1lPzKHEQL-bnEPW9cCWDKDeq_9rAZ3zQ-/edit?usp=drive_link", 4:"https://docs.google.com/document/d/1tRtyRqDUsoCRhi4paxhP_9cJ6QoT0JGL/edit?usp=drive_link", 5:"https://docs.google.com/document/d/1XHyACi3WOlqnOR11GdxB2kYCJszC9QCE/edit?usp=drive_link", 6:"https://docs.google.com/document/d/1p28rJUG02pXM3X9GXxRHDGS7ASo1lYex/edit?usp=sharing", 7:"https://docs.google.com/document/d/1HkJxW2S7MB7NQQrpzfvVr4QLnTu5CPPJ/edit?usp=drive_link", 8:"https://docs.google.com/document/d/1Y9HZX6wTP7qWCyu222gTvTTwKMZUNGvM/edit?usp=drive_link", 9:"https://docs.google.com/document/d/1edjfV_DdpZOnjQIdDwMmnUka2Ib3Kx3C/edit?usp=drive_link", 10:"https://docs.google.com/document/d/1HUwQxfPjqtPA76FiT4CPxlOr2h2lAfmS/edit?usp=drive_link", 11:"https://docs.google.com/document/d/1RXlarvMskO4W9B9_LZ6_SQwZ1Dcg7f3Y/edit?usp=drive_link", 12:"https://docs.google.com/document/d/1jIfzQ6ok37rD_DkyRiKEBdAcYcl0-EOP/edit?usp=drive_link", 13:"https://docs.google.com/document/d/18ctUdVYgbejInY7Ao4HBDubqAM-n6Ol5/edit?usp=drive_link", 14:"https://docs.google.com/document/d/1fg-DL7J56S6Ac9JZdxfgyV6XqtPmNTiP/edit?usp=drive_link", 15:"https://docs.google.com/document/d/1ucqLmjTygfQn5v57vepTt3WXBimcu31n/edit?usp=drive_link", 16:"https://docs.google.com/document/d/15ohe-amAATbZN40iktIe9ef4-CxDxqlz/edit?usp=drive_link", 17:"https://docs.google.com/document/d/1im-un_U_vUcSrLX-jV7mwOWQPZxdzpXb/edit?usp=drive_link", 18:"https://docs.google.com/document/d/1A059lW_diw_vzmdYH_pbNhnsqqk7YbiV/edit?usp=drive_link", 19:"https://docs.google.com/document/d/1s68-qVirVHnbX9fmgYuBj0a6cpMYagLU/edit?usp=drive_link" };
+    const designedLinks = { 1:"https://docs.google.com/presentation/d/1uDdcvGLTkiAejl-c39828B-HacTgFE_d/edit?usp=drive_link", 2:"https://docs.google.com/presentation/d/1RW7Vj-Qu4Ko40sASnO1KJSBQITUwKMks/edit?usp=sharing", 3:"https://docs.google.com/presentation/d/1PftXXcfUxcz4FrPTIeRR0WKtKWUo9VlG/edit?usp=sharing", 4:"https://docs.google.com/presentation/d/1exDU-XQZ8s2aEZ3WGOF6v7e55Uo7A-FH/edit?usp=sharing", 5:"https://docs.google.com/presentation/d/1exDU-XQZ8s2aEZ3WGOF6v7e55Uo7A-FH/edit?usp=sharing", 6:"https://docs.google.com/presentation/d/1exDU-XQZ8s2aEZ3WGOF6v7e55Uo7A-FH/edit?usp=sharing", 7:"https://docs.google.com/presentation/d/1IodTn1BAMErcvWCeay_WgyNioasR29Pz/edit?usp=sharing", 8:"https://docs.google.com/presentation/d/1zaSmsmTmRkGo2cQL3G9H3Oq2U44VnlqR/edit?usp=sharing", 9:"https://docs.google.com/presentation/d/1-5hxC57PeOp8oUgIrAU4xbxF2KcBHs_x/edit?usp=sharing", 10:"https://docs.google.com/presentation/d/1K3LWMiKKGCGFtMN6yhHSd1clvBzJ0sFk/edit?usp=sharing", 11:"https://docs.google.com/presentation/d/1kVylZdXAIs3VRJSAbPYiq6WM6G8jwPAM/edit?usp=sharing", 12:"https://docs.google.com/presentation/d/1RcCLA_mmSRIWGjnkMPs4YQWnuzsVT3ys/edit?usp=sharing", 13:"https://docs.google.com/presentation/d/17fiCqmpKc5QmXnkfUgLUGg8Zu15m_0xY/edit?usp=sharing", 14:"https://docs.google.com/presentation/d/1-Cg4gP6D7_n04BSZchmgBDpan5P5B31l/edit?usp=sharing", 15:"https://docs.google.com/presentation/d/13SjcI7T8QgBFI31-hxIoRYUfmDVyaCSP/edit?usp=sharing", 16:"https://docs.google.com/presentation/d/1mUqZT8aQs6qG4ORt-rdCJWeuCyP3jMb9/edit?usp=sharing", 17:"https://docs.google.com/presentation/d/1Vf8C0YNz7aeBXKyXbUq572qg69A06rnK/edit?usp=sharing", 18:"https://docs.google.com/presentation/d/1sR6nFTFnWDHauXiP_D91cYO1NohhK9Jb/edit?usp=sharing", 19:"https://docs.google.com/presentation/d/14T0z8p0DXJBux9bO58nyA6cT1GRSv4eY/edit?usp=sharing" };
+    const aiLinks = { 1:"https://docs.google.com/presentation/d/1E8qTMEhZwk_fEa7VqAfvP2DMdshMfA92/edit?usp=sharing", 2:"https://docs.google.com/presentation/d/1mFbeEw9qwLwFj-3d7uzpZZYcEHy636ef/edit?usp=sharing", 3:"https://docs.google.com/presentation/d/13hTPjHj91JsK3ZQdYjk35iwEvVl-LXWg/edit?usp=sharing", 4:"https://docs.google.com/presentation/d/1FOqHr_uym7rm1PTgmV7bfL2Djvn89fJ4/edit?usp=sharing", 5:"https://docs.google.com/presentation/d/13eb9IvlOqb1Yipa3vq4wkTWZRoZMq1NV/edit?usp=sharing", 6:"https://docs.google.com/presentation/d/1iO--k5P8O--ullrQOUuHE8vvCSBdLuMD/edit?usp=sharing", 7:"https://docs.google.com/presentation/d/18ntkVe-q7pPVELTurxa0rxBGB8PtDaeH/edit?usp=sharing", 8:"https://docs.google.com/presentation/d/1IBB_WrbYKgP09840AYDRpgEOGrXj8vSH/edit?usp=sharing", 9:"https://docs.google.com/presentation/d/1OsoPslrkqeSWHxY48rt6nz8OAGUnyZLJ/edit?usp=sharing", 10:"https://docs.google.com/presentation/d/1oCOn4XVzD33LguRt0_3oeRc2-4Giz_yj/edit?usp=sharing", 11:"https://docs.google.com/presentation/d/15OweV1syZbtM10SIOIy3m5IsBVH7U4iz/edit?usp=sharing", 12:"https://docs.google.com/presentation/d/1h86O65r0McXLOipj6makhPDqmdng3YFs/edit?usp=sharing", 13:"https://docs.google.com/presentation/d/1TuQnU3_x6YKyQW7LavDOZa681Pmr31S9/edit?usp=sharing", 14:"https://docs.google.com/presentation/d/1dn97rm2TurEHK-W_CFmp18jS2EYB2lcv/edit?usp=sharing", 15:"https://docs.google.com/presentation/d/1lDuh11_eyOZzmoWlSlZDM0reRLRFM7Ou/edit?usp=sharing", 16:"https://docs.google.com/presentation/d/1DKm4C4t4epGBGj5k2bogxid5Ic3MMJXK/edit?usp=sharing", 17:"https://docs.google.com/presentation/d/1L1X12pX12s6ePO5J2Bb3ytPFtLSJjoaP/edit?usp=sharing", 18:"https://docs.google.com/presentation/d/1yhd8Ywq-kDgjNKNfcUrxR7wjD_Qma106/edit?usp=sharing", 19:"https://docs.google.com/presentation/d/1sNfdLvRnyCSypEHuzPAjmA2IJwqvuuub/edit?usp=sharing" };
 
-
-    const lessons = [
-        "Scientific study", "Classification of living things", "Lifecycle of honeybee", 
-        "Heredity", "Physiological structure and life process", "Nature and environment", 
-        "Force and Motion", "Pressure", "Heat", "Wave", "Electricity and Magnetism", 
-        "Universe", "Information and communication technology", "Classification of elements", 
-        "Chemical reaction", "Some gases", "Metals", "Hydrocarbon and its compounds", 
-        "Chemicals used in daily life"
-    ];
+    const lessonIcons = ['🔬','🧬','🐝','🧬','🦴','🌿','⚡','🔩','🌡️','🌊','🔋','🌌','💻','⚗️','🧪','🫧','⚙️','🛢️','🧴'];
+    const lessons = ["Scientific study","Classification of living things","Lifecycle of honeybee","Heredity","Physiological structure and life process","Nature and environment","Force and Motion","Pressure","Heat","Wave","Electricity and Magnetism","Universe","Information and communication technology","Classification of elements","Chemical reaction","Some gases","Metals","Hydrocarbon and its compounds","Chemicals used in daily life"];
 
     const container = document.getElementById('mainList');
+    const noResults = document.getElementById('noResults');
 
-    lessons.forEach((title, index) => {
-        const lessonNum = index + 1;
-        const currentCdcLink = cdcLinks[lessonNum] || "#";
-        const currentModernLink = modernLinks[lessonNum] || "#";
-        const currentNeemaQA = neemaQA_Links[lessonNum] || "#";
-        const currentCdcQA = cdcQA_Links[lessonNum] || "#";
-const currentDesignedLink = Designed_Links[lessonNum] || "#";
+    // ─── Render Lesson Cards ───
+    lessons.forEach((title, idx) => {
+        const n = idx + 1;
+        const card = document.createElement('div');
+        card.className = 'lesson-card';
+        card.dataset.title = title.toLowerCase();
 
-
-        const html = `
-            <div class="item">
-                <span class="item-title">${lessonNum}. ${title}</span>
-                <div class="popout-menu">
-                    <div class="has-sub">
-                        📄 PDF Notes
-                        <div class="sub-popout">
-                            <a href="${currentCdcLink}" target="_blank">1. CDC</a>
-                            <a href="${currentModernLink}" target="_blank">2. Modern</a>
-                            <a href="#" target="_blank">3. Sangam's</a>
-                        </div>
+        card.innerHTML = `
+            <div class="card-top">
+                <span class="card-num">CH ${String(n).padStart(2,'0')}</span>
+                <span class="card-icon">${lessonIcons[idx]}</span>
+            </div>
+            <div class="card-title">${title}</div>
+            <div class="card-actions">
+                <div class="dropdown-wrap">
+                    <button class="action-btn">📄 PDF Notes ▾</button>
+                    <div class="dropdown-menu">
+                        <a href="${cdcLinks[n]}" target="_blank"><span class="dot"></span>CDC Notes</a>
+                        <a href="${modernLinks[n]}" target="_blank"><span class="dot"></span>Modern Notes</a>
+                        <a href="#" target="_blank"><span class="dot"></span>Sangam's Notes</a>
                     </div>
-
-                    <div class="has-sub">
-                        📊 PPT Slides
-                        <div class="sub-popout">
-                            <a href="${currentDesignedLink}" target="_blank">1. Designed</a>
-                            <a href="#" target="_blank">2. AI Assisted</a>
-                            <a href="#" target="_blank">3. NCED</a>
-                        </div>
+                </div>
+                <div class="dropdown-wrap">
+                    <button class="action-btn">📊 PPT Slides ▾</button>
+                    <div class="dropdown-menu">
+                        <a href="${designedLinks[n]}" target="_blank"><span class="dot"></span>Designed</a>
+                        <a href="${aiLinks[n]}" target="_blank"><span class="dot"></span>AI Assisted</a>
+                        <a href="#" target="_blank"><span class="dot"></span>NCED</a>
                     </div>
-
-                    <div class="has-sub">
-                        🎥 Video Lessons
-                        <div class="sub-popout">
-                            <a href="#" target="_blank">Concept Video</a>
-                        </div>
+                </div>
+                <div class="dropdown-wrap">
+                    <button class="action-btn">❓ Q&amp;A ▾</button>
+                    <div class="dropdown-menu">
+                        <a href="${cdcQA[n]}" target="_blank"><span class="dot"></span>CDC Q&amp;A</a>
+                        <a href="#" target="_blank"><span class="dot"></span>Modern Q&amp;A</a>
+                        <a href="#" target="_blank"><span class="dot"></span>Sangam's Q&amp;A</a>
+                        <a href="${neemaQA[n]}" target="_blank"><span class="dot"></span>Neema Q&amp;A</a>
                     </div>
-
-                    <div class="has-sub">
-                        ❓ Question Answers
-                        <div class="sub-popout">
-                            <a href="${currentCdcQA}" target="_blank">1. CDC Q&A</a>
-                            <a href="#" target="_blank">2. Modern Q&A</a>
-                            <a href="#" target="_blank">3. Sangam's Q&A</a>
-                            <a href="${currentNeemaQA}" target="_blank">4. Neema Q&A</a>
-                        </div>
+                </div>
+                <div class="dropdown-wrap">
+                    <button class="action-btn">🎥 Video ▾</button>
+                    <div class="dropdown-menu">
+                        <a href="#" target="_blank"><span class="dot"></span>Concept Video</a>
                     </div>
                 </div>
             </div>
         `;
-        container.innerHTML += html;
+        container.appendChild(card);
     });
-</script>
 
+    // ─── Search ───
+    document.getElementById('searchInput').addEventListener('input', function () {
+        const q = this.value.trim().toLowerCase();
+        const cards = container.querySelectorAll('.lesson-card');
+        let visible = 0;
+        cards.forEach(card => {
+            const match = card.dataset.title.includes(q);
+            card.classList.toggle('hidden', !match);
+            if (match) visible++;
+        });
+        noResults.style.display = visible === 0 ? 'block' : 'none';
+    });
+
+    // ─── Board accordion ───
+    function toggleBoard(id) {
+        const el = document.getElementById(id);
+        el.classList.toggle('open');
+    }
+
+    // ─── Portal Dropdown System (click-based) ───
+    const portal = document.createElement('div');
+    portal.id = 'dropdown-portal';
+    document.body.appendChild(portal);
+
+    let activeBtn = null;
+
+    function openPortal(btn) {
+        const menu = btn.closest('.dropdown-wrap').querySelector('.dropdown-menu');
+        if (!menu) return;
+
+        // Build portal content fresh from the stored data attributes on the button
+        portal.innerHTML = menu.innerHTML;
+
+        // Position portal relative to viewport using fixed coords
+        const rect = btn.getBoundingClientRect();
+        const GAP = 5;
+        const PORTAL_W = 210;
+        const PORTAL_H = portal.querySelectorAll('a').length * 40 + 16;
+
+        // Vertical: below button, flip up if needed
+        let top = rect.bottom + GAP;
+        if (top + PORTAL_H > window.innerHeight) {
+            top = rect.top - GAP - PORTAL_H;
+        }
+        if (top < 4) top = 4;
+
+        // Horizontal: align left of button, flip if overflows right
+        let left = rect.left;
+        if (left + PORTAL_W > window.innerWidth - 8) {
+            left = rect.right - PORTAL_W;
+        }
+        if (left < 4) left = 4;
+
+        portal.style.top  = top + 'px';
+        portal.style.left = left + 'px';
+        portal.style.minWidth = PORTAL_W + 'px';
+
+        // Deactivate previous button
+        if (activeBtn && activeBtn !== btn) activeBtn.classList.remove('active');
+        activeBtn = btn;
+        btn.classList.add('active');
+
+        portal.classList.add('visible');
+    }
+
+    function closePortal() {
+        portal.classList.remove('visible');
+        if (activeBtn) { activeBtn.classList.remove('active'); activeBtn = null; }
+    }
+
+    // Click on any action button: toggle portal
+    document.addEventListener('click', e => {
+        const btn = e.target.closest('.action-btn');
+        if (btn) {
+            e.stopPropagation();
+            if (activeBtn === btn && portal.classList.contains('visible')) {
+                closePortal();
+            } else {
+                openPortal(btn);
+            }
+            return;
+        }
+        // Click inside portal (on a link): let it navigate, then close
+        if (portal.contains(e.target)) {
+            setTimeout(closePortal, 80);
+            return;
+        }
+        // Click anywhere else: close
+        closePortal();
+    });
+
+    // Close on scroll or resize
+    window.addEventListener('scroll', closePortal, { passive: true });
+    window.addEventListener('resize', closePortal, { passive: true });
+</script>
 </body>
 </html>
