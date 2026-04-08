@@ -26,9 +26,14 @@
 
 <script>
     function checkPassword() {
-    const pass = document.getElementById("passwordField").value;
-    window.location.href = pass + ".html"; 
-}
+        const password = document.getElementById("passwordField").value;
+        // CHANGE 'science2081' to whatever password you want!
+        if (password === "science2081") {
+            window.location.href = "hub.html"; 
+        } else {
+            document.getElementById("message").innerText = "Incorrect Password. Try again.";
+        }
+    }
 </script>
 
 </body>
