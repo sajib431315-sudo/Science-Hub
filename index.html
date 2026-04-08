@@ -1,41 +1,35 @@
-<script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth-compat.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Science & Technology Hub</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; width: 320px; }
+        h2 { color: #1a73e8; margin-bottom: 1.5rem; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #1a73e8; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #1557b0; }
+        #message { color: red; font-size: 14px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="login-card">
+    <h2>Science Hub Login</h2>
+    <p>Enter the shared password to access Grade 10 resources.</p>
+    <input type="password" id="passwordField" placeholder="Enter Password">
+    <button onclick="checkPassword()">Enter Hub</button>
+    <p id="message"></p>
+</div>
 
 <script>
-  // Your Firebase configuration (from Firebase Console)
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "your-project.firebaseapp.com",
-    projectId: "your-project-id",
-  };
-  firebase.initializeApp(firebaseConfig);
-
-  function loginWithGoogle() {
-    var provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithPopup(provider).then((result) => {
-        // After Google Login, show the Password Field
-        document.getElementById('password-section').style.display = 'block';
-        document.getElementById('google-btn').style.display = 'none';
-        console.log("User logged in:", result.user.email);
-    });
-  }
-
-  function finalCheck() {
-    const sharedPass = document.getElementById('pass').value;
-    if (sharedPass === "science2081") {
-        window.location.href = "hub.html";
-    } else {
-        alert("Incorrect shared password!");
-    }
-  }
+    function checkPassword() {
+    const pass = document.getElementById("passwordField").value;
+    window.location.href = pass + ".html"; 
+}
 </script>
 
-<div id="login-container">
-    <button id="google-btn" onclick="loginWithGoogle()">Step 1: Sign in with Gmail</button>
-    
-    <div id="password-section" style="display:none;">
-        <p>Step 2: Enter Shared Access Code</p>
-        <input type="password" id="pass">
-        <button onclick="finalCheck()">Access Hub</button>
-    </div>
-</div>
+</body>
+</html>
