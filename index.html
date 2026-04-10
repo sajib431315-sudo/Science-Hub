@@ -1282,4 +1282,84 @@ const JBDsLinks = {
     window.addEventListener('resize', closePortal, { passive: true });
 </script>
 </body>
-</html>
+</html><script>
+    // ═══════════════════════════════════════════════
+    // ─── RIGHT-CLICK DISABLE ───────────────────────
+    // ═══════════════════════════════════════════════
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        showToast('Right-click is disabled on this page.');
+        return false;
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'F12') { e.preventDefault(); return false; }
+        if (e.ctrlKey && ['u','U','s','S'].includes(e.key)) { e.preventDefault(); return false; }
+        if (e.ctrlKey && e.shiftKey && ['i','I','j','J','c','C'].includes(e.key)) { e.preventDefault(); return false; }
+    });
+
+    function showToast(msg) {
+        let t = document.getElementById('__rcToast');
+        if (!t) {
+            t = document.createElement('div');
+            t.id = '__rcToast';
+            t.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#1a2744;color:#a0aec0;border:1px solid rgba(99,179,237,0.25);border-radius:8px;padding:9px 20px;font-size:0.78rem;font-family:\'DM Sans\',sans-serif;z-index:999999;box-shadow:0 8px 32px rgba(0,0,0,0.6);opacity:0;transition:opacity 0.2s;pointer-events:none;';
+            document.body.appendChild(t);
+        }
+        t.textContent = msg;
+        t.style.opacity = '1';
+        clearTimeout(t._tid);
+        t._tid = setTimeout(() => { t.style.opacity = '0'; }, 2200);
+    }
+
+    // ═══════════════════════════════════════════════
+    // ─── LINK MASKING ──────────────────────────────
+    // ═══════════════════════════════════════════════
+    function go(encoded) {
+        try {
+            const url = atob(encoded);
+            window.open(url, '_blank', 'noopener,noreferrer');
+        } catch(e) {}
+    }
+
+    function enc(url) {
+        try { return btoa(unescape(encodeURIComponent(url))); }
+        catch(e) { return btoa(url); }
+    }
+
+    function maskLinks(root) {
+        (root || document).querySelectorAll('a[href]').forEach(function(a) {
+            const href = a.getAttribute('href');
+            if (href && (href.startsWith('http://') || href.startsWith('https://'))) {
+                a.removeAttribute('href');
+                a.removeAttribute('target');
+                a.removeAttribute('rel');
+                const encoded = enc(href);
+                a.setAttribute('onclick', "go('" + encoded + "')");
+                a.style.cursor = 'pointer';
+            }
+        });
+    }
+
+    // Mask all static links on page load
+    maskLinks(document);
+
+    // Patch the portal so cloned links are also masked on injection
+    var _portal = document.getElementById('dropdown-portal');
+    var _subPortal = document.getElementById('sub-portal');
+
+    var __origInnerHTML_portal = Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML');
+    var _portsToWatch = [_portal, _subPortal];
+
+    // Use MutationObserver to catch when portal content changes
+    var _observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(m) {
+            if (_portsToWatch.indexOf(m.target) !== -1 || _portsToWatch.indexOf(m.target.closest && m.target.closest('#dropdown-portal,#sub-portal')) !== -1) {
+                maskLinks(m.target);
+            }
+        });
+    });
+
+    _observer.observe(_portal, { childList: true, subtree: true });
+    _observer.observe(_subPortal, { childList: true, subtree: true });
+</script>
