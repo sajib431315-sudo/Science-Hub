@@ -5,35 +5,118 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | Science & Technology Hub</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .login-card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; width: 320px; }
-        h2 { color: #1a73e8; margin-bottom: 1.5rem; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #1a73e8; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
-        button:hover { background: #1557b0; }
-        #message { color: red; font-size: 14px; margin-top: 10px; }
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            /* Background Settings */
+            background: url("background.png") no-repeat center center fixed; 
+            background-size: cover; 
+            
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+        }
+
+        /* Glassmorphism effect to match the dark header style */
+        .login-card { 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 2.5rem; 
+            border-radius: 16px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            text-align: center; 
+            width: 340px; 
+        }
+
+        h2 { color: #1a73e8; margin-bottom: 0.5rem; margin-top: 0; }
+        p { color: #555; font-size: 14px; margin-bottom: 1.5rem; }
+
+        .password-container { position: relative; width: 100%; margin: 10px 0; }
+        
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            box-sizing: border-box; 
+            font-size: 16px;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 18px;
+            user-select: none;
+        }
+
+        button { 
+            width: 100%; 
+            padding: 12px; 
+            background: #1a73e8; 
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+
+        button:hover { background: #1557b0; transform: translateY(-1px); }
+        #message { color: #d93025; font-size: 14px; margin-top: 15px; font-weight: 500; }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
 <div class="login-card">
-    <h2>Science Hub Login</h2>
-    <p>Enter the shared password to access Grade 10 resources.</p>
-    <input type="password" id="passwordField" placeholder="Enter Password">
+    <h2>Science Hub</h2>
+    <p>Secure Access for Grade 10</p>
+    
+    <div class="password-container">
+        <input type="password" id="passwordField" placeholder="Enter Password">
+        <span class="toggle-password" onclick="toggleVisibility()" id="toggleIcon">👁️</span>
+    </div>
+
     <button onclick="checkPassword()">Enter Hub</button>
     <p id="message"></p>
 </div>
 
 <script>
+    // 1. Toggle Visibility
+    function toggleVisibility() {
+        const passwordField = document.getElementById("passwordField");
+        const toggleIcon = document.getElementById("toggleIcon");
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            toggleIcon.innerText = "🙈";
+        } else {
+            passwordField.type = "password";
+            toggleIcon.innerText = "👁️";
+        }
+    }
+
+    // 2. Login Logic
     function checkPassword() {
         const password = document.getElementById("passwordField").value;
-        // CHANGE 'science2081' to whatever password you want!
         if (password === "sajib#") {
             window.location.href = "hub.html"; 
         } else {
             document.getElementById("message").innerText = "Incorrect Password. Try again.";
         }
     }
+
+    // 3. Security: Disable Right-Click and Shortcuts
+    document.addEventListener('contextmenu', event => event.preventDefault());
+    document.onkeydown = function(e) {
+        if(e.keyCode == 123 || 
+          (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) || 
+          (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) { 
+            return false; 
+        }
+    };
 </script>
 
 </body>
